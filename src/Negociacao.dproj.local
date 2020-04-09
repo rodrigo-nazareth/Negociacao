@@ -1,0 +1,10 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<BorlandProject>
+  <Transactions>
+    <Transaction>2020/04/08 22:42:22.982,E:\Projetos\SIAGRI\src\HOME.pas=E:\Projetos\SIAGRI\src\Main.pas</Transaction>
+    <Transaction>2020/04/08 22:42:22.982,E:\Projetos\SIAGRI\src\HOME.dfm=E:\Projetos\SIAGRI\src\Main.dfm</Transaction>
+    <Transaction>2020/04/08 22:47:32.413,E:\Projetos\SIAGRI\src\Negociacao.dproj=E:\Projetos\SIAGRI\src\MDIAPP.dproj</Transaction>
+    <Transaction>2020/04/08 22:48:03.090,E:\Projetos\SIAGRI\src\CHILDWIN.PAS=</Transaction>
+    <Transaction>2020/04/08 22:53:25.699,E:\Projetos\SIAGRI\src\about.pas=</Transaction>
+  </Transactions>
+</BorlandProject>

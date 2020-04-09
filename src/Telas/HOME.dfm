@@ -1,0 +1,33 @@
+object MainForm: TMainForm
+  Left = 194
+  Top = 111
+  Caption = 'Home'
+  ClientHeight = 419
+  ClientWidth = 662
+  Color = clAppWorkSpace
+  Font.Charset = DEFAULT_CHARSET
+  Font.Color = clBlack
+  Font.Height = -11
+  Font.Name = 'Default'
+  Font.Style = []
+  FormStyle = fsMDIForm
+  OldCreateOrder = False
+  Position = poDefault
+  PixelsPerInch = 96
+  TextHeight = 13
+  object StatusBar: TStatusBar
+    Left = 0
+    Top = 400
+    Width = 662
+    Height = 19
+    Margins.Left = 2
+    Margins.Top = 2
+    Margins.Right = 2
+    Margins.Bottom = 2
+    AutoHint = True
+    Panels = <>
+    SimplePanel = True
+    ExplicitTop = 244
+    ExplicitWidth = 360
+  end
+end
