@@ -89,6 +89,45 @@
         <DCCReference Include="Biblioteca\_ConexaoBanco.pas"/>
         <DCCReference Include="Biblioteca\Ambiente.pas"/>
         <DCCReference Include="Biblioteca\Biblioteca.pas"/>
+        <DCCReference Include="Telas\Cadastro.pas">
+            <Form>FormCadastro</Form>
+            <FormType>dfm</FormType>
+        </DCCReference>
+        <DCCReference Include="Telas\CadastroProdutor.pas">
+            <Form>FormCadastroProdutor</Form>
+            <FormType>dfm</FormType>
+        </DCCReference>
+        <DCCReference Include="Telas\CadastroDistribuidor.pas">
+            <Form>FormCadastroDistribuidor</Form>
+            <FormType>dfm</FormType>
+        </DCCReference>
+        <DCCReference Include="Telas\CadastroNegociacao.pas">
+            <Form>FormCadastroNegociacao</Form>
+            <FormType>dfm</FormType>
+        </DCCReference>
+        <DCCReference Include="Telas\CadastroProduto.pas">
+            <Form>FormCadastroProduto</Form>
+        </DCCReference>
+        <DCCReference Include="Telas\PesquisaNegociacao.pas">
+            <Form>FormPesquisaNegociacao</Form>
+            <FormType>dfm</FormType>
+        </DCCReference>
+        <DCCReference Include="Telas\PesquisaProduto.pas">
+            <Form>FormPesquisaProduto</Form>
+            <FormType>dfm</FormType>
+        </DCCReference>
+        <DCCReference Include="Telas\PesquisaPessoa.pas">
+            <Form>FormPesquisaPessoa</Form>
+            <FormType>dfm</FormType>
+        </DCCReference>
+        <DCCReference Include="Telas\RelacaoNegociacoes.pas">
+            <Form>FormRelacaoNegociacoes</Form>
+            <FormType>dfm</FormType>
+        </DCCReference>
+        <DCCReference Include="Telas\ManutencaoNegociacao.pas">
+            <Form>FormManutencaoNegociacao</Form>
+            <FormType>dfm</FormType>
+        </DCCReference>
         <BuildConfiguration Include="Debug">
             <Key>Cfg_2</Key>
             <CfgParent>Base</CfgParent>
