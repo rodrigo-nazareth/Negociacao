@@ -22,6 +22,8 @@ type
     miCadastroNegociacao: TMenuItem;
     miManutencaoNegociacao: TMenuItem;
     miRelacaoNegociacao: TMenuItem;
+    miAjuda: TMenuItem;
+    miTestarConexao: TMenuItem;
     procedure FormCloseQuery(Sender: TObject; var CanClose: Boolean);
     procedure miSairClick(Sender: TObject);
     procedure FormCreate(Sender: TObject);
@@ -31,6 +33,8 @@ type
     procedure miCadastroNegociacaoClick(Sender: TObject);
     procedure miManutencaoNegociacaoClick(Sender: TObject);
     procedure miRelacaoNegociacaoClick(Sender: TObject);
+    procedure FormClose(Sender: TObject; var Action: TCloseAction);
+    procedure miTestarConexaoClick(Sender: TObject);
   private
     { Private declarations }
   public
@@ -46,6 +50,13 @@ uses
   CadastroProdutor, Biblioteca, CadastroDistribuidor, CadastroProduto, CadastroNegociacao, ManutencaoNegociacao, RelacaoNegociacoes;
 
 {$R *.dfm}
+
+procedure TFormPrincipal.FormClose(Sender: TObject; var Action: TCloseAction);
+begin
+  Ambiente.con_banco.Destroy;
+//  Ambiente.con_banco.Desconectar;
+//  FreeAndNil(Ambiente.con_banco);
+end;
 
 procedure TFormPrincipal.FormCloseQuery(Sender: TObject; var CanClose: Boolean);
 var
@@ -101,6 +112,14 @@ end;
 procedure TFormPrincipal.miSairClick(Sender: TObject);
 begin
   Close;
+end;
+
+procedure TFormPrincipal.miTestarConexaoClick(Sender: TObject);
+begin
+  if Ambiente.con_banco.Conectado then
+    MessageDlg('Conectado!', mtInformation, [mbOK], 0)
+  else
+    MessageDlg('Desconectado!', mtInformation, [mbOK], 0)
 end;
 
 procedure TFormPrincipal.miRelacaoNegociacaoClick(Sender: TObject);

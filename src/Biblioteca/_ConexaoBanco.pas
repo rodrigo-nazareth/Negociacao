@@ -3,7 +3,7 @@ unit _ConexaoBanco;
 interface
 
 uses
-	SqlExpr, inifiles, SysUtils, Forms, Classes;
+	inifiles, SysUtils, Forms, Classes, Data.SqlExpr, Data.DBXCommon;
 
 type
   TPesquisa = class(TSQLQuery)
@@ -14,6 +14,7 @@ type
 
 	TConexaoBanco = class(TComponent)
   protected
+    transacao: TDBXTransaction;
     conexao_banco: TSQLConnection;
   public
 		constructor Create(AOwner: TComponent); override;
@@ -24,12 +25,21 @@ type
 
     function  Conectado: Boolean;
     function  NovaPesquisa: TPesquisa;
+
+    procedure AbrirTransacao;
+    procedure FecharTransacao;
+    procedure VoltarTransacao;
 	end;
 
 implementation
 
 uses
   Winapi.Windows, Vcl.Dialogs, Data.DB;
+
+procedure TConexaoBanco.AbrirTransacao;
+begin
+  transacao := conexao_banco.BeginTransaction;
+end;
 
 function TConexaoBanco.Conectado: Boolean;
 begin
@@ -78,12 +88,22 @@ begin
   inherited Destroy;
 end;
 
+procedure TConexaoBanco.FecharTransacao;
+begin
+  conexao_banco.CommitFreeAndNil(transacao);
+end;
+
 function TConexaoBanco.NovaPesquisa: TPesquisa;
 begin
   Result := TPesquisa.Create(Self);
   Result.SQLConnection := conexao_banco;
   Result.DisableControls;
   Result.SQL.Clear;
+end;
+
+procedure TConexaoBanco.VoltarTransacao;
+begin
+  conexao_banco.RollbackIncompleteFreeAndNil(transacao);
 end;
 
 constructor TPesquisa.Create(AOwner: TComponent);

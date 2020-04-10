@@ -6,23 +6,27 @@ uses
   _ConexaoBanco in 'Biblioteca\_ConexaoBanco.pas',
   Ambiente in 'Biblioteca\Ambiente.pas',
   Biblioteca in 'Biblioteca\Biblioteca.pas',
-  Cadastro in 'Telas\Cadastro.pas' {FormCadastro},
+  _FormBase in 'Telas\_FormBase.pas' {FormBase},
+  CadastroPadrao in 'Telas\CadastroPadrao.pas' {FormCadastroPadrao},
   CadastroProdutor in 'Telas\CadastroProdutor.pas' {FormCadastroProdutor},
   CadastroDistribuidor in 'Telas\CadastroDistribuidor.pas' {FormCadastroDistribuidor},
-  CadastroNegociacao in 'Telas\CadastroNegociacao.pas' {FormCadastroNegociacao},
   CadastroProduto in 'Telas\CadastroProduto.pas' {FormCadastroProduto},
+  CadastroNegociacao in 'Telas\CadastroNegociacao.pas' {FormCadastroNegociacao},
+  ManutencaoNegociacao in 'Telas\ManutencaoNegociacao.pas' {FormManutencaoNegociacao},
+  PesquisaBase in 'Telas\PesquisaBase.pas' {FormPesquisaBase},
+  PesquisaPessoa in 'Telas\PesquisaPessoa.pas' {FormPesquisaPessoa},
   PesquisaNegociacao in 'Telas\PesquisaNegociacao.pas' {FormPesquisaNegociacao},
   PesquisaProduto in 'Telas\PesquisaProduto.pas' {FormPesquisaProduto},
-  PesquisaPessoa in 'Telas\PesquisaPessoa.pas' {FormPesquisaPessoa},
   RelacaoNegociacoes in 'Telas\RelacaoNegociacoes.pas' {FormRelacaoNegociacoes},
-  ManutencaoNegociacao in 'Telas\ManutencaoNegociacao.pas' {FormManutencaoNegociacao};
+  BuscarCaminhoBanco in 'Telas\BuscarCaminhoBanco.pas' {FormBuscarCaminhoBanco};
 
-{$R *.RES}
+{$R *.res}
 
 begin
-//  Ambiente.IniciarAplicacao;
-
   Application.Initialize;
+
+  Ambiente.IniciarAplicacao;
+
   Application.MainFormOnTaskBar := True;
   Application.CreateForm(TFormPrincipal, FormPrincipal);
   Application.Run;

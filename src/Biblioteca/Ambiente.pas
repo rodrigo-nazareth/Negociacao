@@ -12,6 +12,9 @@ procedure IniciarAplicacao;
 
 implementation
 
+uses
+  BuscarCaminhoBanco, Biblioteca;
+
 function ConectarBancoDados: Boolean;
 var
   caminho_banco: string;
@@ -26,34 +29,17 @@ var
   function BuscarBanco: string;
   var
     ini: TIniFile;
-    arquivo: TOpenDialog;
   begin
-    Result := '';
-
-    arquivo := TOpenDialog.Create(Application);
-    arquivo.Title := 'Buscar Arquivo Banco';
-    arquivo.InitialDir := ExtractFilePath(Application.ExeName);
-    arquivo.Filter := 'Arquivo de banco de dados (*.FDB)|*.FDB';
-
-    if not arquivo.Execute then
-      Exit
-    else
-      Result := arquivo.FileName;
-
-    arquivo.Free;
+    Result := BuscarCaminhoBanco.BuscaCaminhoBanco;
+    if BuscarCaminhoBanco._cancelou then begin
+      MensagemCanceladoUsuario;
+      Exit;
+    end;
 
     arquivo_ini := ExtractFilePath(Application.ExeName) + 'CONFIG.INI';
     try
       ini := TIniFile.Create(arquivo_ini);
       ini.WriteString('CONEXAO', 'caminho_caminho', Result);
-//      if not FileExists(arquivo_ini) then begin
-//        ini := TIniFile.Create(arquivo_ini);
-//        ini.WriteString('CONEXAO', 'caminho_caminho', caminho_banco);
-//      end
-//      else begin
-//        ini := TIniFile.Create(arquivo_ini);
-//        ini.WriteString('CONEXAO', 'caminho_caminho', caminho_banco);
-//      end;
     finally
       FreeAndNil(ini);
     end;

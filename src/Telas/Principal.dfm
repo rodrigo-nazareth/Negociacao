@@ -13,7 +13,9 @@ object FormPrincipal: TFormPrincipal
   FormStyle = fsMDIForm
   Menu = mmPrincipal
   OldCreateOrder = False
-  Position = poDefault
+  Position = poScreenCenter
+  WindowState = wsMaximized
+  OnClose = FormClose
   OnCloseQuery = FormCloseQuery
   OnCreate = FormCreate
   PixelsPerInch = 96
@@ -68,6 +70,13 @@ object FormPrincipal: TFormPrincipal
       object miRelacaoNegociacao: TMenuItem
         Caption = 'Relat'#243'rio de negocia'#231#227'o'
         OnClick = miRelacaoNegociacaoClick
+      end
+    end
+    object miAjuda: TMenuItem
+      Caption = 'Ajuda'
+      object miTestarConexao: TMenuItem
+        Caption = 'Testar conex'#227'o'
+        OnClick = miTestarConexaoClick
       end
     end
     object miSair: TMenuItem

@@ -89,24 +89,38 @@
         <DCCReference Include="Biblioteca\_ConexaoBanco.pas"/>
         <DCCReference Include="Biblioteca\Ambiente.pas"/>
         <DCCReference Include="Biblioteca\Biblioteca.pas"/>
-        <DCCReference Include="Telas\Cadastro.pas">
-            <Form>FormCadastro</Form>
-            <FormType>dfm</FormType>
+        <DCCReference Include="Telas\_FormBase.pas">
+            <Form>FormBase</Form>
+        </DCCReference>
+        <DCCReference Include="Telas\CadastroPadrao.pas">
+            <Form>FormCadastroPadrao</Form>
         </DCCReference>
         <DCCReference Include="Telas\CadastroProdutor.pas">
             <Form>FormCadastroProdutor</Form>
-            <FormType>dfm</FormType>
         </DCCReference>
         <DCCReference Include="Telas\CadastroDistribuidor.pas">
             <Form>FormCadastroDistribuidor</Form>
+            <FormType>dfm</FormType>
+        </DCCReference>
+        <DCCReference Include="Telas\CadastroProduto.pas">
+            <Form>FormCadastroProduto</Form>
             <FormType>dfm</FormType>
         </DCCReference>
         <DCCReference Include="Telas\CadastroNegociacao.pas">
             <Form>FormCadastroNegociacao</Form>
             <FormType>dfm</FormType>
         </DCCReference>
-        <DCCReference Include="Telas\CadastroProduto.pas">
-            <Form>FormCadastroProduto</Form>
+        <DCCReference Include="Telas\ManutencaoNegociacao.pas">
+            <Form>FormManutencaoNegociacao</Form>
+            <FormType>dfm</FormType>
+        </DCCReference>
+        <DCCReference Include="Telas\PesquisaBase.pas">
+            <Form>FormPesquisaBase</Form>
+            <FormType>dfm</FormType>
+        </DCCReference>
+        <DCCReference Include="Telas\PesquisaPessoa.pas">
+            <Form>FormPesquisaPessoa</Form>
+            <FormType>dfm</FormType>
         </DCCReference>
         <DCCReference Include="Telas\PesquisaNegociacao.pas">
             <Form>FormPesquisaNegociacao</Form>
@@ -116,16 +130,12 @@
             <Form>FormPesquisaProduto</Form>
             <FormType>dfm</FormType>
         </DCCReference>
-        <DCCReference Include="Telas\PesquisaPessoa.pas">
-            <Form>FormPesquisaPessoa</Form>
-            <FormType>dfm</FormType>
-        </DCCReference>
         <DCCReference Include="Telas\RelacaoNegociacoes.pas">
             <Form>FormRelacaoNegociacoes</Form>
             <FormType>dfm</FormType>
         </DCCReference>
-        <DCCReference Include="Telas\ManutencaoNegociacao.pas">
-            <Form>FormManutencaoNegociacao</Form>
+        <DCCReference Include="Telas\BuscarCaminhoBanco.pas">
+            <Form>FormBuscarCaminhoBanco</Form>
             <FormType>dfm</FormType>
         </DCCReference>
         <BuildConfiguration Include="Debug">
@@ -579,13 +589,13 @@
                         <Operation>1</Operation>
                     </Platform>
                 </DeployClass>
-                <ProjectRoot Platform="OSX32" Name="$(PROJECTNAME).app"/>
+                <ProjectRoot Platform="iOSDevice32" Name="$(PROJECTNAME).app"/>
                 <ProjectRoot Platform="Android" Name="$(PROJECTNAME)"/>
                 <ProjectRoot Platform="Win32" Name="$(PROJECTNAME)"/>
                 <ProjectRoot Platform="iOSDevice64" Name="$(PROJECTNAME).app"/>
-                <ProjectRoot Platform="Win64" Name="$(PROJECTNAME)"/>
+                <ProjectRoot Platform="OSX32" Name="$(PROJECTNAME).app"/>
                 <ProjectRoot Platform="iOSSimulator" Name="$(PROJECTNAME).app"/>
-                <ProjectRoot Platform="iOSDevice32" Name="$(PROJECTNAME).app"/>
+                <ProjectRoot Platform="Win64" Name="$(PROJECTNAME)"/>
             </Deployment>
         </BorlandProject>
         <ProjectFileVersion>12</ProjectFileVersion>
