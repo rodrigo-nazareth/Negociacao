@@ -17,9 +17,20 @@ type
     miDistribuidor: TMenuItem;
     miProduto: TMenuItem;
     miSair: TMenuItem;
+    miNegociacao: TMenuItem;
+    Relatrio1: TMenuItem;
+    miCadastroNegociacao: TMenuItem;
+    miManutencaoNegociacao: TMenuItem;
+    miRelacaoNegociacao: TMenuItem;
     procedure FormCloseQuery(Sender: TObject; var CanClose: Boolean);
     procedure miSairClick(Sender: TObject);
     procedure FormCreate(Sender: TObject);
+    procedure miProdutorClick(Sender: TObject);
+    procedure miDistribuidorClick(Sender: TObject);
+    procedure miProdutoClick(Sender: TObject);
+    procedure miCadastroNegociacaoClick(Sender: TObject);
+    procedure miManutencaoNegociacaoClick(Sender: TObject);
+    procedure miRelacaoNegociacaoClick(Sender: TObject);
   private
     { Private declarations }
   public
@@ -31,14 +42,12 @@ var
 
 implementation
 
+uses
+  CadastroProdutor, Biblioteca, CadastroDistribuidor, CadastroProduto, CadastroNegociacao, ManutencaoNegociacao, RelacaoNegociacoes;
+
 {$R *.dfm}
 
-procedure TFormPprocedure TFormPrincipal.Button3Click(Sender: TObject);
-begin
-
-end;
-
-rincipal.FormCloseQuery(Sender: TObject; var CanClose: Boolean);
+procedure TFormPrincipal.FormCloseQuery(Sender: TObject; var CanClose: Boolean);
 var
   i: Integer;
 begin
@@ -60,12 +69,43 @@ end;
 
 procedure TFormPrincipal.FormCreate(Sender: TObject);
 begin
-  StatusBar1.Panels[0].Text := FormatDateTime('dd/mm/yyyy',Now);
+  StatusBar.Panels[0].Text := FormatDateTime('dd/mm/yyyy',Now);
+  Biblioteca._tela_princial := Self;
+end;
+
+procedure TFormPrincipal.miCadastroNegociacaoClick(Sender: TObject);
+begin
+  AbrirForm(TFormCadastroNegociacao);
+end;
+
+procedure TFormPrincipal.miDistribuidorClick(Sender: TObject);
+begin
+  AbrirForm(TFormCadastroDistribuidor);
+end;
+
+procedure TFormPrincipal.miManutencaoNegociacaoClick(Sender: TObject);
+begin
+  AbrirForm(TFormManutencaoNegociacao);
+end;
+
+procedure TFormPrincipal.miProdutoClick(Sender: TObject);
+begin
+  AbrirForm(TFormCadastroProduto);
+end;
+
+procedure TFormPrincipal.miProdutorClick(Sender: TObject);
+begin
+  AbrirForm(TFormCadastroProdutor);
 end;
 
 procedure TFormPrincipal.miSairClick(Sender: TObject);
 begin
   Close;
+end;
+
+procedure TFormPrincipal.miRelacaoNegociacaoClick(Sender: TObject);
+begin
+  AbrirForm(TFormRelacaoNegociacoes);
 end;
 
 end.

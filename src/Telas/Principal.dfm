@@ -41,12 +41,33 @@ object FormPrincipal: TFormPrincipal
       Caption = 'Cadastros'
       object miProdutor: TMenuItem
         Caption = 'Produtor'
+        OnClick = miProdutorClick
       end
       object miDistribuidor: TMenuItem
         Caption = 'Distribuidor'
+        OnClick = miDistribuidorClick
       end
       object miProduto: TMenuItem
         Caption = 'Produto'
+        OnClick = miProdutoClick
+      end
+    end
+    object miNegociacao: TMenuItem
+      Caption = 'Negocia'#231#227'o'
+      object miCadastroNegociacao: TMenuItem
+        Caption = 'Cadastro de negocia'#231#227'o'
+        OnClick = miCadastroNegociacaoClick
+      end
+      object miManutencaoNegociacao: TMenuItem
+        Caption = 'Manuten'#231#227'o de negocia'#231#227'o'
+        OnClick = miManutencaoNegociacaoClick
+      end
+    end
+    object Relatrio1: TMenuItem
+      Caption = 'Relat'#243'rio'
+      object miRelacaoNegociacao: TMenuItem
+        Caption = 'Relat'#243'rio de negocia'#231#227'o'
+        OnClick = miRelacaoNegociacaoClick
       end
     end
     object miSair: TMenuItem
