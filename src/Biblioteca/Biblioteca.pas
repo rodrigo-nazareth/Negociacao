@@ -2,26 +2,44 @@ unit Biblioteca;
 
 interface
 
-uses Winapi.Windows, System.SysUtils;
+uses System.SysUtils, Vcl.Forms;
 
-procedure EliminarProcessos;
+var
+  _tela_princial: TForm;
+
+function AbrirForm(classe: TFormClass): TForm;
 
 implementation
 
-procedure EliminarProcessos;
+function AbrirForm(classe: TFormClass): TForm;
 var
-  PID_adm: UInt32;
-  PID_adm_int: Integer;
-  processo_eliminar: THandle;
+  i: Integer;
+  form: TForm;
+  existe_form: Boolean;
 begin
-  try
-    PID_adm := GetCurrentProcessId;
-    PID_adm_int := StrToInt(UIntToStr(PID_adm));
-    processo_eliminar := OpenProcess(PROCESS_TERMINATE, False, PID_adm_int);
-    TerminateProcess(processo_eliminar, 0);
-  except
-    //Não faz nada
+  form := nil;
+
+  existe_form := False;
+  for i := 0 to _tela_princial.MDIChildCount - 1 do begin
+    if _tela_princial.MDIChildren[i].ClassName <> classe.ClassName then
+      Continue;
+
+    form := _tela_princial.MDIChildren[i];
+    existe_form := True;
+    Break;
   end;
+
+  if existe_form then begin
+    form.WindowState := WsNormal;
+    form.BringToFront;
+    form.SetFocus;
+  end
+  else begin
+    form := Classe.Create(Application);;
+    form.Show;
+  end;
+
+  Result := form;
 end;
 
 end.
