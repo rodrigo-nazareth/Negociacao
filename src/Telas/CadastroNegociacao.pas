@@ -4,11 +4,11 @@ interface
 
 uses
   Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants, System.Classes, Vcl.Graphics,
-  Vcl.Controls, Vcl.Forms, Vcl.Dialogs, CadastroPadrao, Vcl.Buttons,
+  Vcl.Controls, Vcl.Forms, Vcl.Dialogs, CadastroBase, Vcl.Buttons,
   Vcl.ExtCtrls, Vcl.StdCtrls;
 
 type
-  TFormCadastroNegociacao = class(TFormCadastroPadrao)
+  TFormCadastroNegociacao = class(TFormCadastroBase)
   private
     { Private declarations }
   public

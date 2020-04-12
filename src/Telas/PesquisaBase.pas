@@ -5,7 +5,7 @@ interface
 uses
   Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants, System.Classes, Vcl.Graphics,
   Vcl.Controls, Vcl.Forms, Vcl.Dialogs, _FormBase, Vcl.Buttons, Vcl.ExtCtrls,
-  Vcl.Grids, Vcl.StdCtrls;
+  Vcl.Grids, Vcl.StdCtrls, System.UITypes;
 
 type
   TFormPesquisaBase = class(TFormBase)
@@ -17,22 +17,25 @@ type
     stAtalhos: TStaticText;
     btnOk: TBitBtn;
     procedure FormKeyDown(Sender: TObject; var Key: Word; Shift: TShiftState);
-    procedure sgPesquisaKeyDown(Sender: TObject; var Key: Word; Shift: TShiftState);
     procedure FormCreate(Sender: TObject);
+    procedure sgPesquisaDblClick(Sender: TObject);
+    procedure sgPesquisaEnter(Sender: TObject);
   private
-    { Private declarations }
-  public
-    { Public declarations }
+    procedure Ok(Sender: TObject);
   end;
 
 implementation
+
+uses
+  Biblioteca;
 
 {$R *.dfm}
 
 procedure TFormPesquisaBase.FormCreate(Sender: TObject);
 begin
   inherited;
-  ActiveControl := cbFiltros;
+  ActiveControl := eChave;
+  btnOk.OnClick := Ok;
 end;
 
 procedure TFormPesquisaBase.FormKeyDown(Sender: TObject; var Key: Word; Shift: TShiftState);
@@ -44,11 +47,31 @@ begin
   end;
 end;
 
-procedure TFormPesquisaBase.sgPesquisaKeyDown(Sender: TObject; var Key: Word; Shift: TShiftState);
+procedure TFormPesquisaBase.Ok(Sender: TObject);
+begin
+  if SgPesquisa.Cells[0, 1] = '' then
+    Exclamar('Nenhum dado foi selecionado!')
+  else
+    ModalResult := mrOk;
+end;
+
+procedure TFormPesquisaBase.sgPesquisaDblClick(Sender: TObject);
 begin
   inherited;
-  if Key = VK_RETURN then
-    btnOk.Click;
+  btnOk.Click;
+end;
+
+procedure TFormPesquisaBase.sgPesquisaEnter(Sender: TObject);
+begin
+  inherited;
+
+  if Trim(eChave.Text) = '' then begin
+    MessageDlg('É necessário informar valor para pesquisa!', mtWarning, [mbOK], 0);
+    eChave.SetFocus;
+    Abort;
+  end;
+
+  LimparGrid(sgPesquisa);
 end;
 
 end.

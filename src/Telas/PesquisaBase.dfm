@@ -1,7 +1,10 @@
 inherited FormPesquisaBase: TFormPesquisaBase
+  BorderIcons = [biSystemMenu, biMinimize]
+  BorderStyle = bsSingle
   Caption = 'Pesquisa Base'
-  ClientHeight = 303
-  ClientWidth = 499
+  ClientHeight = 313
+  ClientWidth = 509
+  OldCreateOrder = True
   OnKeyDown = FormKeyDown
   ExplicitWidth = 515
   ExplicitHeight = 342
@@ -22,15 +25,15 @@ inherited FormPesquisaBase: TFormPesquisaBase
     Caption = 'Chave para pesquisa'
   end
   inherited pnBotoes: TPanel
-    Top = 273
-    Width = 499
+    Top = 283
+    Width = 509
     ExplicitTop = 273
     ExplicitWidth = 499
     DesignSize = (
-      499
+      509
       30)
     inherited btnSair: TBitBtn
-      Left = 417
+      Left = 427
       Top = 3
       ExplicitLeft = 417
       ExplicitTop = 3
@@ -64,8 +67,8 @@ inherited FormPesquisaBase: TFormPesquisaBase
   end
   object sgPesquisa: TStringGrid
     Left = 0
-    Top = 51
-    Width = 499
+    Top = 63
+    Width = 509
     Height = 205
     Align = alBottom
     ColCount = 2
@@ -76,20 +79,25 @@ inherited FormPesquisaBase: TFormPesquisaBase
     RowCount = 2
     Options = [goFixedVertLine, goFixedHorzLine, goHorzLine, goColSizing, goRowSelect]
     TabOrder = 3
-    OnKeyDown = sgPesquisaKeyDown
+    OnDblClick = sgPesquisaDblClick
+    OnEnter = sgPesquisaEnter
+    ExplicitTop = 51
+    ExplicitWidth = 499
     ColWidths = (
       64
       385)
   end
   object stAtalhos: TStaticText
     Left = 0
-    Top = 256
-    Width = 499
-    Height = 17
+    Top = 268
+    Width = 509
+    Height = 15
     Align = alBottom
     Alignment = taCenter
     AutoSize = False
-    Caption = 'Duplo clique ou [Enter] para selecionar | [ESC] para sair'
+    Caption = 
+      'Clique em OK, Duplo clique ou [Enter] para selecionar | [ESC] pa' +
+      'ra sair'
     Color = 15395562
     Font.Charset = DEFAULT_CHARSET
     Font.Color = clWindowText
@@ -100,5 +108,7 @@ inherited FormPesquisaBase: TFormPesquisaBase
     ParentFont = False
     TabOrder = 4
     Transparent = False
+    ExplicitTop = 257
+    ExplicitWidth = 499
   end
 end

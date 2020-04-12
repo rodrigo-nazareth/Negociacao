@@ -2,7 +2,8 @@ unit Biblioteca;
 
 interface
 
-uses System.SysUtils, Vcl.Forms, Vcl.Grids, Vcl.Dialogs, System.UITypes;
+uses System.SysUtils, Vcl.Forms, Vcl.Grids, Vcl.Dialogs, System.UITypes, Vcl.StdCtrls, VCLTee.Chart, Vcl.ExtCtrls, Vcl.CheckLst, Vcl.Controls, Vcl.Mask,
+     Vcl.ComCtrls;
 
 type
   TColunasCabecalho = record
@@ -11,16 +12,41 @@ type
   end;
   TArrayOfTColunasCabecalho = array of TColunasCabecalho;
 
+  TRetornoComunicaoBanco = record
+    teve_erro: Boolean;
+    mensagem_erro: string;
+  end;
+
 var
   _tela_princial: TForm;
 
-function AbrirForm(classe: TFormClass): TForm;
+function  AbrirForm(classe: TFormClass): TForm;
 procedure LimparGrid(var grid: TStringGrid);
 procedure IniciarGrid(var grid: TStringGrid; colunas: array of string); overload;
 procedure IniciarGrid(var grid: TStringGrid; colunas: TArrayOfTColunasCabecalho); overload;
 procedure IniciarGrid(var grid: TStringGrid; colunas: array of variant); overload;
+
 procedure MensagemCanceladoUsuario;
 procedure MensagemSucesso;
+procedure MensagemErro(msg_adicional: string);
+procedure Exclamar(msg: string);
+
+function  ValorInt(str: string): Integer; overload;
+function  ValorInt(edit: TEdit): Integer; overload;
+function  Valor(s: string): variant; overload;
+function  Valor(st: TStaticText): variant; overload;
+
+procedure LimparObjetos(objs:array of TControl);
+procedure Habilitar(objs: array of TControl; ativar: Boolean; limpar: Boolean);
+function  SomenteNumeros(valor: string): string;
+
+function  FormatoMilharStr(numero: Double; decimais: Integer = 2): string;
+
+procedure ValidarCampo(
+  abrotar: Boolean;
+  mensagem: string;
+  campo: TWinControl
+);
 
 implementation
 
@@ -139,6 +165,174 @@ begin
     [mbOK],
     0
   );
+end;
+
+function ValorInt(str: string): Integer;
+begin
+  try
+    Result := StrToInt(str);
+  except
+    Result := 0;
+  end;
+end;
+
+function  ValorInt(edit: TEdit): Integer;
+begin
+  try
+    Result := StrToInt(edit.Text);
+  except
+    Result := 0;
+  end;
+end;
+
+function  Valor(s: string): variant; overload;
+begin
+  try
+    Result:=StrToFloat(s);
+  except
+    Result := 0;
+  end;
+end;
+
+function  Valor(st: TStaticText): variant; overload;
+begin
+  try
+    Result := StrToFloat(st.Caption);
+  except
+    Result := 0;
+  end;
+end;
+
+procedure LimparObjetos(objs:array of TControl);
+var
+  i: Integer;
+  j: Integer;
+begin
+  for i := Low(objs) to High(objs) do begin
+    if objs[i] is TEdit then
+      TEdit(objs[i]).Clear
+    else if objs[i] is TCustomMaskEdit then
+      TCustomMaskEdit(objs[i]).Clear
+    else if objs[i] is TMemo then
+      TMemo(objs[i]).Lines.Clear
+    else if objs[i] is TCheckBox then
+      TCheckBox(objs[i]).State := cbGrayed
+    else if objs[i] is TStringGrid then
+      LimparGrid(TStringGrid(objs[i]))
+    else if objs[i] is TRadioGroup then
+      TRadioGroup(objs[i]).ItemIndex := -1
+    else if objs[i] is TListBox then
+      TListBox(objs[i]).Items.Clear
+    else if objs[i] is TCheckListBox then
+      TCheckListBox(objs[i]).Items.Clear
+    else if objs[i] is TPageControl then
+      TPageControl(objs[i]).ActivePageIndex := 0
+    else if objs[i] is TComboBox then
+      TComboBox(objs[i]).ItemIndex := -1
+    else if objs[i] is TStaticText then
+      TStaticText(objs[i]).Caption := ''
+    else if objs[i] is TImage then
+      TImage(objs[i]).Picture := nil
+    else if objs[i] is TLabel then
+      TLabel(objs[i]).Caption := ''
+    else if objs[i] is TChart then begin
+      for j:= 1 to TChart(objs[i]).SeriesList.Count do begin
+        TChart(objs[i]).Series[j-1].ShowInLegend := False;
+        TChart(objs[i]).Series[j-1].Clear;
+      end;
+    end
+    else if objs[i] is TColorBox then
+      TColorBox(objs[i]).ItemIndex := -1
+    else if objs[i] is TLabeledEdit then
+      TLabeledEdit(objs[i]).Clear;
+  end;
+end;
+
+// Procedimento para ativar/desativar controles da tela
+procedure Habilitar(objs: array of TControl; ativar: Boolean; limpar: Boolean);
+var
+  i: Integer;
+begin
+  for i := Low(objs) to High(objs) do begin
+    if objs[i] is TTabSheet then
+      TTabSheet(objs[i]).TabVisible := ativar
+    else if objs[i] is TControl then
+      TControl(objs[i]).Enabled := ativar;
+  end;
+
+  if limpar then
+    LimparObjetos(objs);
+end;
+
+function SomenteNumeros(valor: string): string;
+var
+  i: Integer;
+begin
+  Result := '';
+  for i := 1 to Length(valor) do begin
+    if  CharInSet(valor[i], ['0'..'9']) then
+      Result := Result + valor[i];
+  end;
+end;
+
+procedure MensagemErro(msg_adicional: string);
+var
+  mensagem: string;
+begin
+  mensagem := 'Erro ao realizar a operação!';
+
+  msg_adicional := Trim(msg_adicional);
+  if msg_adicional <> '' then
+    mensagem := mensagem + #13 +msg_adicional;
+
+  MessageDlg(
+    mensagem,
+    mtError,
+    [mbOK],
+    0
+  );
+end;
+
+function FormatoMilharStr(numero: Double; decimais: Integer = 2): string;
+begin
+  if Decimais = 0 then
+    Result := FormatFloat('#,##0', numero)
+  else if Decimais = 1 then
+    Result := FormatFloat('#,##0.0', numero)
+  else if Decimais = 2 then
+    Result := FormatFloat('#,##0.00', numero)
+  else if Decimais = 3 then
+    Result := FormatFloat('#,##0.000', numero)
+  else if Decimais = 4 then
+    Result := FormatFloat('#,##0.0000', numero)
+  else if Decimais = 5 then
+    Result := FormatFloat('#,##0.00000', numero)
+  else if Decimais = 6 then
+    Result := FormatFloat('#,##0.000000', numero)
+  else if Decimais = 7 then
+    Result := FormatFloat('#,##0.0000000', numero)
+  else if Decimais = 8 then
+    Result := FormatFloat('#,##0.00000000', numero)
+  else
+    Result:=FormatFloat('#,##0.00',numero);
+end;
+
+procedure Exclamar(msg: string);
+begin
+  MessageDlg(msg, mtInformation, [mbOK], 0);
+end;
+
+procedure ValidarCampo(
+  abrotar: Boolean;
+  mensagem: string;
+  campo: TWinControl
+);
+begin
+  if abrotar then begin
+    MessageDlg(mensagem, mtInformation, [mbOK], 0);
+    campo.SetFocus;
+    Abort;
+  end;
 end;
 
 end.

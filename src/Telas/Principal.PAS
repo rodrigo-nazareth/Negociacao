@@ -47,15 +47,13 @@ var
 implementation
 
 uses
-  CadastroProdutor, Biblioteca, CadastroDistribuidor, CadastroProduto, CadastroNegociacao, ManutencaoNegociacao, RelacaoNegociacoes;
+  Biblioteca, CadastroProduto, CadastroNegociacao, ManutencaoNegociacao, RelacaoNegociacoes, CadastroPessoa;
 
 {$R *.dfm}
 
 procedure TFormPrincipal.FormClose(Sender: TObject; var Action: TCloseAction);
 begin
   Ambiente.con_banco.Destroy;
-//  Ambiente.con_banco.Desconectar;
-//  FreeAndNil(Ambiente.con_banco);
 end;
 
 procedure TFormPrincipal.FormCloseQuery(Sender: TObject; var CanClose: Boolean);
@@ -90,8 +88,11 @@ begin
 end;
 
 procedure TFormPrincipal.miDistribuidorClick(Sender: TObject);
+var
+  form: TForm;
 begin
-  AbrirForm(TFormCadastroDistribuidor);
+  form := AbrirForm(TFormCadastroPessoa);
+  TFormCadastroPessoa(form).SetarTipoPessoa('DIS');
 end;
 
 procedure TFormPrincipal.miManutencaoNegociacaoClick(Sender: TObject);
@@ -105,8 +106,11 @@ begin
 end;
 
 procedure TFormPrincipal.miProdutorClick(Sender: TObject);
+var
+  form: TForm;
 begin
-  AbrirForm(TFormCadastroProdutor);
+  form := AbrirForm(TFormCadastroPessoa);
+  TFormCadastroPessoa(form).SetarTipoPessoa('PRO');
 end;
 
 procedure TFormPrincipal.miSairClick(Sender: TObject);
