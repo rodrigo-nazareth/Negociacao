@@ -32,8 +32,6 @@ type
     function  Excluir: Boolean; virtual;
     function  Gravar: Boolean; virtual;
     procedure Pesquisar; virtual;
-  public
-    { Public declarations }
   end;
 
 var

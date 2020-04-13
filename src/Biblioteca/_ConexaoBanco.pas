@@ -50,8 +50,9 @@ type
     sql: string;
     con_banco: TConexaoBanco;
   public
-    constructor Create(c: TConexaoBanco);
+    constructor Create(c: TConexaoBanco); reintroduce; overload;
     destructor Destroy; override;
+
     procedure SetSql(_sql: string);
     procedure Executar; overload;
     procedure Executar(valores: array of variant); overload;
@@ -70,7 +71,7 @@ type
     colunas: TArrayOfColunas;
     con_banco: TConexaoBanco;
   public
-    constructor Create(_tabela: string; c: TConexaoBanco);
+    constructor Create(c: TConexaoBanco; _tabela: string); reintroduce; overload;
     destructor Destroy; override;
 
     procedure AddColuna(coluna: string; valor: Variant; tipo_coluna: TColuna = tpCampo);
@@ -230,7 +231,7 @@ end;
 
 constructor TExecucao.Create(c: TConexaoBanco);
 begin
-  inherited Create(c);;
+  inherited Create(c);
   con_banco := c;
 end;
 
@@ -346,7 +347,7 @@ begin
   end;
 end;
 
-constructor TTabela.Create(_tabela: string; c: TConexaoBanco);
+constructor TTabela.Create(c: TConexaoBanco; _tabela: string);
 begin
   inherited Create(c);
   con_banco := c;
@@ -417,21 +418,14 @@ begin
 
   sql := 'insert into ' + tabela + '(';
   par := 0;
-  for i := Low(colunas) to High(colunas) do begin
-    if colunas[i].tipo = tpChave then
-      Continue;
-
+  for i := Low(colunas) to High(colunas) do
     sql := sql + colunas[i].nome + ', ';
-  end;
 
   sql := Trim(sql);
   sql := Copy(sql, 0, Length(sql) - 1);
   sql := sql + ') values (';
 
   for i := Low(colunas) to High(colunas) do begin
-    if colunas[i].tipo = tpChave then
-      Continue;
-
     sql := sql + ':P' + IntToStr(par + 1) + ', ';
     Inc(par);
   end;
@@ -441,9 +435,6 @@ begin
   sql := sql + ')';
 
   for i := Low(colunas) to High(colunas) do begin
-    if colunas[i].tipo = tpChave then
-      Continue;
-
     SetLength(valores, Length(valores) + 1);
     valores[High(valores)] := colunas[i].valor;
   end;

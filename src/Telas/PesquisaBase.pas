@@ -20,6 +20,7 @@ type
     procedure FormCreate(Sender: TObject);
     procedure sgPesquisaDblClick(Sender: TObject);
     procedure sgPesquisaEnter(Sender: TObject);
+    procedure sgPesquisaKeyDown(Sender: TObject; var Key: Word; Shift: TShiftState);
   private
     procedure Ok(Sender: TObject);
   end;
@@ -49,7 +50,7 @@ end;
 
 procedure TFormPesquisaBase.Ok(Sender: TObject);
 begin
-  if SgPesquisa.Cells[0, 1] = '' then
+  if (sgPesquisa.Cells[0, 1] = '') and (sgPesquisa.Cells[1, 1] = '') then
     Exclamar('Nenhum dado foi selecionado!')
   else
     ModalResult := mrOk;
@@ -64,7 +65,6 @@ end;
 procedure TFormPesquisaBase.sgPesquisaEnter(Sender: TObject);
 begin
   inherited;
-
   if Trim(eChave.Text) = '' then begin
     MessageDlg('É necessário informar valor para pesquisa!', mtWarning, [mbOK], 0);
     eChave.SetFocus;
@@ -72,6 +72,15 @@ begin
   end;
 
   LimparGrid(sgPesquisa);
+end;
+
+procedure TFormPesquisaBase.sgPesquisaKeyDown(Sender: TObject; var Key: Word; Shift: TShiftState);
+begin
+  inherited;
+  if Key = 13 then
+    btnOk.Click
+  else if Key = 27 then
+    btnSair.Click;
 end;
 
 end.

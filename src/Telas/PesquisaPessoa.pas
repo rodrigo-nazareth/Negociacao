@@ -11,11 +11,8 @@ type
   TFormPesquisaPessoa = class(TFormPesquisaBase)
     procedure FormCreate(Sender: TObject);
     procedure sgPesquisaEnter(Sender: TObject);
-    procedure sgPesquisaKeyDown(Sender: TObject; var Key: Word; Shift: TShiftState);
   private
     tipo_pessoa: string;
-  public
-    { Public declarations }
   end;
 
 function PesquisarPessoa(_tipo_pessoa: string): Integer;
@@ -37,8 +34,8 @@ begin
   IniciarGrid(
     sgPesquisa,
     [
-      'Código', 60,
-      'Nome', 400
+      'Código',
+      'Nome'
     ]
   );
 end;
@@ -82,10 +79,11 @@ begin
   eChave.Text := Trim(eChave.Text);
   if cbFiltros.ItemIndex = 0 then
     filtro := filtro + ' and RAZAO_SOCIAL like ''%' + eChave.Text + '%'''
-  else if cbFiltros.ItemIndex = 0 then
-    filtro := filtro + ' and CPF_CNPJ like ''%' + eChave.Text + '%'''
+  else if cbFiltros.ItemIndex = 1 then
+    filtro := filtro + ' and NOME_FANTASIA like ''%' + eChave.Text + '%'''
   else
-    filtro := filtro + ' and RAZAO_SOCIAL like ''%' + eChave.Text + '%''';
+    filtro := filtro + ' and CPF_CNPJ = ' + QuotedStr(eChave.Text);
+
 
   filtro := filtro + ' order by RAZAO_SOCIAL';
 
@@ -100,15 +98,6 @@ begin
 
   if linha > sgPesquisa.RowCount then
     sgPesquisa.RowCount := linha;
-end;
-
-procedure TFormPesquisaPessoa.sgPesquisaKeyDown(Sender: TObject; var Key: Word; Shift: TShiftState);
-begin
-  inherited;
-  if Key = 13 then
-    btnOk.Click
-  else if Key = 27 then
-    btnSair.Click;
 end;
 
 end.

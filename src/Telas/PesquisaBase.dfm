@@ -1,4 +1,5 @@
 inherited FormPesquisaBase: TFormPesquisaBase
+  ActiveControl = eChave
   BorderIcons = [biSystemMenu, biMinimize]
   BorderStyle = bsSingle
   Caption = 'Pesquisa Base'
@@ -27,15 +28,16 @@ inherited FormPesquisaBase: TFormPesquisaBase
   inherited pnBotoes: TPanel
     Top = 283
     Width = 509
-    ExplicitTop = 273
-    ExplicitWidth = 499
+    TabOrder = 1
+    ExplicitTop = 283
+    ExplicitWidth = 509
     DesignSize = (
       509
       30)
     inherited btnSair: TBitBtn
       Left = 427
       Top = 3
-      ExplicitLeft = 417
+      ExplicitLeft = 427
       ExplicitTop = 3
     end
     object btnOk: TBitBtn
@@ -54,7 +56,8 @@ inherited FormPesquisaBase: TFormPesquisaBase
     Width = 145
     Height = 21
     Style = csDropDownList
-    TabOrder = 1
+    TabOrder = 2
+    OnKeyDown = TeclaEnter
   end
   object eChave: TEdit
     Left = 159
@@ -63,13 +66,14 @@ inherited FormPesquisaBase: TFormPesquisaBase
     Height = 21
     AutoSize = False
     CharCase = ecUpperCase
-    TabOrder = 2
+    TabOrder = 0
+    OnKeyDown = TeclaEnter
   end
   object sgPesquisa: TStringGrid
     Left = 0
-    Top = 63
+    Top = 55
     Width = 509
-    Height = 205
+    Height = 213
     Align = alBottom
     ColCount = 2
     DefaultRowHeight = 19
@@ -81,8 +85,7 @@ inherited FormPesquisaBase: TFormPesquisaBase
     TabOrder = 3
     OnDblClick = sgPesquisaDblClick
     OnEnter = sgPesquisaEnter
-    ExplicitTop = 51
-    ExplicitWidth = 499
+    OnKeyDown = sgPesquisaKeyDown
     ColWidths = (
       64
       385)
@@ -108,7 +111,5 @@ inherited FormPesquisaBase: TFormPesquisaBase
     ParentFont = False
     TabOrder = 4
     Transparent = False
-    ExplicitTop = 257
-    ExplicitWidth = 499
   end
 end

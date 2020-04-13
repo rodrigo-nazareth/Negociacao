@@ -10,9 +10,4 @@ inherited FormPesquisaPessoa: TFormPesquisaPessoa
       'Nome fantasia'
       'CPF/CNPJ')
   end
-  inherited sgPesquisa: TStringGrid
-    OnDblClick = sgPesquisaDblClick
-    OnEnter = sgPesquisaEnter
-    OnKeyDown = sgPesquisaKeyDown
-  end
 end

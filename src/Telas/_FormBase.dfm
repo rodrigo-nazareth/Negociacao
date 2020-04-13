@@ -4,7 +4,7 @@ object FormBase: TFormBase
   Caption = 'Forme Base'
   ClientHeight = 153
   ClientWidth = 301
-  Color = clBtnFace
+  Color = clGradientInactiveCaption
   Font.Charset = DEFAULT_CHARSET
   Font.Color = clWindowText
   Font.Height = -11

@@ -3,7 +3,7 @@ unit Biblioteca;
 interface
 
 uses System.SysUtils, Vcl.Forms, Vcl.Grids, Vcl.Dialogs, System.UITypes, Vcl.StdCtrls, VCLTee.Chart, Vcl.ExtCtrls, Vcl.CheckLst, Vcl.Controls, Vcl.Mask,
-     Vcl.ComCtrls;
+     Vcl.ComCtrls, Vcl.Graphics;
 
 type
   TColunasCabecalho = record
@@ -14,13 +14,16 @@ type
 
   TRetornoComunicaoBanco = record
     teve_erro: Boolean;
-    mensagem_erro: string;
+    mensagem_retorno: string;
   end;
 
 var
   _tela_princial: TForm;
 
 function  AbrirForm(classe: TFormClass): TForm;
+
+function  SomenteNumeros(valor: string): string;
+
 procedure LimparGrid(var grid: TStringGrid);
 procedure IniciarGrid(var grid: TStringGrid; colunas: array of string); overload;
 procedure IniciarGrid(var grid: TStringGrid; colunas: TArrayOfTColunasCabecalho); overload;
@@ -30,16 +33,20 @@ procedure MensagemCanceladoUsuario;
 procedure MensagemSucesso;
 procedure MensagemErro(msg_adicional: string);
 procedure Exclamar(msg: string);
+function  Questionar(mensagem: string): Boolean;
+
+function RetirarCaracter(s: string; c: char):string;
+function RetirarPontos(s: string): string;
 
 function  ValorInt(str: string): Integer; overload;
 function  ValorInt(edit: TEdit): Integer; overload;
-function  Valor(s: string): variant; overload;
+function  Valor(str: string): variant; overload;
 function  Valor(st: TStaticText): variant; overload;
+function  Valor(e: TCustomEdit): variant; overload;
+function  ValorIntStr(str: string): string; overload;
 
 procedure LimparObjetos(objs:array of TControl);
 procedure Habilitar(objs: array of TControl; ativar: Boolean; limpar: Boolean);
-function  SomenteNumeros(valor: string): string;
-
 function  FormatoMilharStr(numero: Double; decimais: Integer = 2): string;
 
 procedure ValidarCampo(
@@ -48,7 +55,12 @@ procedure ValidarCampo(
   campo: TWinControl
 );
 
+procedure CorStatus(var stStatus: TStaticText);
+
 implementation
+
+uses
+  FrameBasePesquisa;
 
 function AbrirForm(classe: TFormClass): TForm;
 var
@@ -99,10 +111,8 @@ begin
   grid.ColCount := Length(colunas);
   grid.DefaultRowHeight := 19;
 
-  for i := 0 to Length(colunas) - 1 do begin
+  for i := 0 to Length(colunas) - 1 do
     grid.Cells[i, 0] := colunas[i];
-    grid.ColWidths[i] := grid.Canvas.TextWidth(colunas[i]);
-  end;
 end;
 
 procedure IniciarGrid(var grid: TStringGrid; colunas: TArrayOfTColunasCabecalho);
@@ -169,6 +179,7 @@ end;
 
 function ValorInt(str: string): Integer;
 begin
+  str := RetirarPontos(Trim(str));
   try
     Result := StrToInt(str);
   except
@@ -178,6 +189,7 @@ end;
 
 function  ValorInt(edit: TEdit): Integer;
 begin
+  edit.Text := RetirarPontos(Trim(edit.Text));
   try
     Result := StrToInt(edit.Text);
   except
@@ -185,21 +197,51 @@ begin
   end;
 end;
 
-function  Valor(s: string): variant; overload;
+function  Valor(str: string): variant; overload;
 begin
+  str := RetirarPontos(Trim(str));
   try
-    Result:=StrToFloat(s);
+    Result := StrToFloat(str);
   except
     Result := 0;
   end;
 end;
 
 function  Valor(st: TStaticText): variant; overload;
+var
+  str: string;
 begin
+  str := RetirarPontos(Trim(st.Caption));
   try
-    Result := StrToFloat(st.Caption);
+    Result := StrToFloat(str);
   except
     Result := 0;
+  end;
+end;
+
+function Valor(e: TCustomEdit): variant; overload;
+var
+  str: string;
+begin
+  str := RetirarPontos(Trim(e.Text));
+
+  try
+    Result := StrToFloat(str);
+  except
+    Result := 0;
+  end;
+end;
+
+function ValorIntStr(str: string): string; overload;
+var
+  valor: Integer;
+begin
+  str := RetirarPontos(Trim(str));
+  try
+    valor := ValorInt(str);
+    Result := IntToStr(valor);
+  except
+    Result := '';
   end;
 end;
 
@@ -254,7 +296,9 @@ var
   i: Integer;
 begin
   for i := Low(objs) to High(objs) do begin
-    if objs[i] is TTabSheet then
+    if objs[i] is TFramePesquisa then
+      TFramePesquisa(objs[i]).ModoFrame(ativar, limpar)
+    else if objs[i] is TTabSheet then
       TTabSheet(objs[i]).TabVisible := ativar
     else if objs[i] is TControl then
       TControl(objs[i]).Enabled := ativar;
@@ -333,6 +377,39 @@ begin
     campo.SetFocus;
     Abort;
   end;
+end;
+
+function RetirarCaracter(s: string; c: char):string;
+var
+  i: Integer;
+begin
+  Result := '';
+  for i:=1 to Length(s) do begin
+    if s[i] <> c then
+      Result := Result + s[i];
+  end;
+end;
+
+function Questionar(mensagem: string): Boolean;
+begin
+  Result := MessageDlg(mensagem, mtConfirmation, [mbYes, mbNo], 0) = mrYes;
+end;
+
+function RetirarPontos(s: string): string;
+begin
+  Result := RetirarCaracter(s, '.');
+end;
+
+procedure CorStatus(var stStatus: TStaticText);
+begin
+  if stStatus.Caption = 'Pendente' then
+    stStatus.Font.Color := clMaroon
+  else if stStatus.Caption = 'Aprovada' then
+    stStatus.Font.Color := clGreen
+  else if stStatus.Caption = 'Concluída' then
+    stStatus.Font.Color := clBlue
+  else if stStatus.Caption = 'Cancelada' then
+    stStatus.Font.Color := clRed;
 end;
 
 end.

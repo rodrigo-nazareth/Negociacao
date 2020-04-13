@@ -3,7 +3,7 @@ unit _Pessoa;
 interface
 
 uses
-  _ConexaoBanco, Biblioteca, System.SysUtils;
+  _ConexaoBanco, Biblioteca, System.SysUtils, _LimiteCreditoProdutor;
 
 type
   WebPessoa = record
@@ -49,11 +49,12 @@ function AtualizarPessoa(
   razao_social: string;
   nome_fantasia: string;
   cpf_cnpj: string;
-  tipo_pessoa: string
+  tipo_pessoa: string;
+  limites: TArrayOfWebLimiteCreditoProdutor
 ): TRetornoComunicaoBanco;
 
 function DeletarPessoa(con: TConexaoBanco; pessoa_id: Integer): TRetornoComunicaoBanco;
-function BuscarPessoa(con: TConexaoBanco; filtros: string): TArrayOfWebPessoa;
+function BuscarPessoas(con: TConexaoBanco; filtros: string): TArrayOfWebPessoa;
 function BuscaPessoaTelaPesquisa(con: TConexaoBanco; filtro: string): TArrayOfTDadosPessoaPesq;
 
 implementation
@@ -62,7 +63,7 @@ implementation
 
 constructor TPessoa.Create(c: TConexaoBanco);
 begin
-  inherited Create('PESSOAS', c);
+  inherited Create(c, 'PESSOAS');
 end;
 
 function TPessoa.GetCpfCnpj: string;
@@ -121,16 +122,30 @@ function AtualizarPessoa(
   razao_social: string;
   nome_fantasia: string;
   cpf_cnpj: string;
-  tipo_pessoa: string
+  tipo_pessoa: string;
+  limites: TArrayOfWebLimiteCreditoProdutor
 ): TRetornoComunicaoBanco;
 var
- pessoa: TPessoa;
+  i: Integer;
+  pessoa: TPessoa;
+  lim: TLimiteCreditoProdutor;
+  novo_registro: Boolean;
+  pesq: TPesquisa;
 begin
   Result.teve_erro := False;
   pessoa := TPessoa.Create(con);
+  lim := TLimiteCreditoProdutor.Create(con);
+  pesq := con.NovaPesquisa;
 
   try
     con.AbrirTransacao;
+
+    novo_registro := pessoa_id = 0;
+    if novo_registro then begin
+      pesq.SQL.Add('select gen_id(gen_pessoas_id,1) as CODIGO from rdb$database');
+      pesq.Pesquisar;
+      pessoa_id := pesq.AsColunaInt('CODIGO');
+    end;
 
     pessoa.PESSOA_ID := pessoa_id;
     pessoa.RAZAO_SOCIAL := razao_social;
@@ -138,21 +153,44 @@ begin
     pessoa.CPF_CNPJ := cpf_cnpj;
     pessoa.TIPO_PESSOA := tipo_pessoa;
 
-    if pessoa_id > 0 then
-      pessoa.Alterar
+    if novo_registro then
+      pessoa.Inserir
     else
-      pessoa.Inserir;
+      pessoa.Alterar;
+
+    for i := Low(limites) to High(limites) do begin
+      lim.PRODUTOR_ID := pessoa_id;
+      lim.DISTRIBUIDOR_ID := limites[i].distribuidor_id;
+      lim.LIMITE_CREDITO := limites[i].limite_credito;
+
+      pesq.SQL.Clear;
+      pesq.SQL.Add('select count(*) as QTDE from LIMITES_CREDITO_PRODUTOR where PRODUTOR_ID = :P1 and DISTRIBUIDOR_ID = :P2');
+      pesq.Pesquisar([pessoa_id, limites[i].distribuidor_id]);
+      novo_registro := pesq.AsColunaInt('QTDE') = 0;
+
+      if novo_registro then
+        lim.Inserir
+      else
+        lim.Alterar;
+    end;
+
+
+    Result.mensagem_retorno := 'Operação realizada com sucesso!';
+    if novo_registro then
+      Result.mensagem_retorno := Result.mensagem_retorno + #13 + 'Novo código: ' + FormatoMilharStr(pessoa_id, 0);
 
     con.FecharTransacao;
   except on E: Exception do
     begin
       Result.teve_erro := True;
-      Result.mensagem_erro := e.message;
+      Result.mensagem_retorno := e.message;
       con.VoltarTransacao;
     end;
   end;
 
   FreeAndNil(pessoa);
+  pesq.Active := False;
+  pesq.Free;
 end;
 
 function DeletarPessoa(con: TConexaoBanco; pessoa_id: Integer): TRetornoComunicaoBanco;
@@ -172,7 +210,7 @@ begin
   except on E: Exception do
     begin
       Result.teve_erro := True;
-      Result.mensagem_erro := e.message;
+      Result.mensagem_retorno := e.message;
       con.VoltarTransacao;
     end
   end;
@@ -180,7 +218,7 @@ begin
   FreeAndNil(pessoa);
 end;
 
-function BuscarPessoa(con: TConexaoBanco; filtros: string): TArrayOfWebPessoa;
+function BuscarPessoas(con: TConexaoBanco; filtros: string): TArrayOfWebPessoa;
 var
   i: Integer;
   pesq: TPesquisa;

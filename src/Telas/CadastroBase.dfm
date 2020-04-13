@@ -15,13 +15,14 @@ inherited FormCadastroBase: TFormCadastroBase
   inherited pnBotoes: TPanel
     Top = 270
     Width = 568
-    ExplicitTop = 0
-    ExplicitWidth = 558
+    ExplicitTop = 270
+    ExplicitWidth = 568
     DesignSize = (
       568
       30)
     inherited btnSair: TBitBtn
       Left = 487
+      TabOrder = 4
       ExplicitLeft = 487
     end
     object btnCancelar: TBitBtn
@@ -33,7 +34,7 @@ inherited FormCadastroBase: TFormCadastroBase
       Enabled = False
       Kind = bkNo
       NumGlyphs = 2
-      TabOrder = 1
+      TabOrder = 2
       OnClick = btnCancelarClick
     end
     object btnGravar: TBitBtn
@@ -62,7 +63,7 @@ inherited FormCadastroBase: TFormCadastroBase
         0000}
       ModalResult = 6
       NumGlyphs = 2
-      TabOrder = 2
+      TabOrder = 1
       OnClick = btnGravarClick
     end
     object btnPesquisar: TBitBtn
@@ -73,7 +74,7 @@ inherited FormCadastroBase: TFormCadastroBase
       Caption = '&Pesquisar'
       Kind = bkRetry
       NumGlyphs = 2
-      TabOrder = 3
+      TabOrder = 0
       OnClick = btnPesquisarClick
     end
     object btnExcluir: TBitBtn
@@ -103,7 +104,7 @@ inherited FormCadastroBase: TFormCadastroBase
         3333333333333333333888330000333333333333333333333333333333333333
         0000}
       NumGlyphs = 2
-      TabOrder = 4
+      TabOrder = 3
       OnClick = btnExcluirClick
     end
   end
@@ -126,7 +127,5 @@ inherited FormCadastroBase: TFormCadastroBase
     ParentFont = False
     TabOrder = 1
     Transparent = False
-    ExplicitTop = 141
-    ExplicitWidth = 501
   end
 end

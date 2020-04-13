@@ -20,21 +20,21 @@ type
     miNegociacao: TMenuItem;
     Relatrio1: TMenuItem;
     miCadastroNegociacao: TMenuItem;
-    miManutencaoNegociacao: TMenuItem;
     miRelacaoNegociacao: TMenuItem;
     miAjuda: TMenuItem;
     miTestarConexao: TMenuItem;
+    miManutencaoNegociacao: TMenuItem;
     procedure FormCloseQuery(Sender: TObject; var CanClose: Boolean);
     procedure miSairClick(Sender: TObject);
     procedure FormCreate(Sender: TObject);
     procedure miProdutorClick(Sender: TObject);
     procedure miDistribuidorClick(Sender: TObject);
     procedure miProdutoClick(Sender: TObject);
-    procedure miCadastroNegociacaoClick(Sender: TObject);
-    procedure miManutencaoNegociacaoClick(Sender: TObject);
     procedure miRelacaoNegociacaoClick(Sender: TObject);
     procedure FormClose(Sender: TObject; var Action: TCloseAction);
     procedure miTestarConexaoClick(Sender: TObject);
+    procedure miCadastroNegociacaoClick(Sender: TObject);
+    procedure miManutencaoNegociacaoClick(Sender: TObject);
   private
     { Private declarations }
   public
@@ -47,7 +47,7 @@ var
 implementation
 
 uses
-  Biblioteca, CadastroProduto, CadastroNegociacao, ManutencaoNegociacao, RelacaoNegociacoes, CadastroPessoa;
+  Biblioteca, CadastroProduto, ManutencaoNegociacao, RelacaoNegociacoes, CadastroPessoa, CadastroNegociacao;
 
 {$R *.dfm}
 
@@ -82,22 +82,40 @@ begin
   Biblioteca._tela_princial := Self;
 end;
 
-procedure TFormPrincipal.miCadastroNegociacaoClick(Sender: TObject);
-begin
-  AbrirForm(TFormCadastroNegociacao);
-end;
-
 procedure TFormPrincipal.miDistribuidorClick(Sender: TObject);
 var
-  form: TForm;
+//  form: TForm;
+  i: Integer;
+  form_distribuidor: TFormCadastroPessoa;
 begin
-  form := AbrirForm(TFormCadastroPessoa);
-  TFormCadastroPessoa(form).SetarTipoPessoa('DIS');
+//  form := AbrirForm(TFormCadastroPessoa);
+//  TFormCadastroPessoa(form).SetarTipoPessoa('DIS');
+
+  for i := 0 to Screen.FormCount - 1 do begin
+    if Screen.Forms[i].ClassName <> 'TFormCadastroPessoa' then
+      Continue;
+
+    if TFormCadastroPessoa(Screen.Forms[i]).GetTipoPessoa = 'DIS' then begin
+      TFormCadastroPessoa(Screen.Forms[i]).WindowState := WsNormal;
+      TFormCadastroPessoa(Screen.Forms[i]).BringToFront;
+      TFormCadastroPessoa(Screen.Forms[i]).SetFocus;
+      Abort;
+    end;
+  end;
+
+  form_distribuidor := TFormCadastroPessoa.Create(Application);
+  form_distribuidor.Show;
+  form_distribuidor.SetarTipoPessoa('DIS');
 end;
 
 procedure TFormPrincipal.miManutencaoNegociacaoClick(Sender: TObject);
 begin
   AbrirForm(TFormManutencaoNegociacao);
+end;
+
+procedure TFormPrincipal.miCadastroNegociacaoClick(Sender: TObject);
+begin
+  AbrirForm(TFormCadastroNegociacao);
 end;
 
 procedure TFormPrincipal.miProdutoClick(Sender: TObject);
@@ -107,10 +125,27 @@ end;
 
 procedure TFormPrincipal.miProdutorClick(Sender: TObject);
 var
-  form: TForm;
+//  form: TForm;
+  i: Integer;
+  form_produtor: TFormCadastroPessoa;
 begin
-  form := AbrirForm(TFormCadastroPessoa);
-  TFormCadastroPessoa(form).SetarTipoPessoa('PRO');
+//  form := AbrirForm(TFormCadastroPessoa);
+//  TFormCadastroPessoa(form).SetarTipoPessoa('PRO');
+  for i := 0 to Screen.FormCount - 1 do begin
+    if Screen.Forms[i].ClassName <> 'TFormCadastroPessoa' then
+      Continue;
+
+    if TFormCadastroPessoa(Screen.Forms[i]).GetTipoPessoa = 'PRO' then begin
+      TFormCadastroPessoa(Screen.Forms[i]).WindowState := WsNormal;
+      TFormCadastroPessoa(Screen.Forms[i]).BringToFront;
+      TFormCadastroPessoa(Screen.Forms[i]).SetFocus;
+      Abort;
+    end;
+  end;
+
+  form_produtor := TFormCadastroPessoa.Create(Application);
+  form_produtor.Show;
+  form_produtor.SetarTipoPessoa('PRO');
 end;
 
 procedure TFormPrincipal.miSairClick(Sender: TObject);
