@@ -2,8 +2,9 @@ unit Biblioteca;
 
 interface
 
-uses System.SysUtils, Vcl.Forms, Vcl.Grids, Vcl.Dialogs, System.UITypes, Vcl.StdCtrls, VCLTee.Chart, Vcl.ExtCtrls, Vcl.CheckLst, Vcl.Controls, Vcl.Mask,
-     Vcl.ComCtrls, Vcl.Graphics;
+uses
+  System.SysUtils, Vcl.Forms, Vcl.Grids, Vcl.Dialogs, System.UITypes, Vcl.StdCtrls,
+  VCLTee.Chart, Vcl.ExtCtrls, Vcl.CheckLst, Vcl.Controls, Vcl.Mask, Vcl.ComCtrls, Vcl.Graphics;
 
 type
   TColunasCabecalho = record

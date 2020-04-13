@@ -21,11 +21,13 @@ inherited FormManutencaoNegociacao: TFormManutencaoNegociacao
     Top = 167
     Width = 573
     TabOrder = 7
+    ExplicitTop = 167
+    ExplicitWidth = 573
     inherited btnSair: TBitBtn
       Left = 520
       Width = 51
       TabOrder = 4
-      ExplicitLeft = 476
+      ExplicitLeft = 520
       ExplicitWidth = 51
     end
     object btnAprovar: TBitBtn
@@ -148,15 +150,15 @@ inherited FormManutencaoNegociacao: TFormManutencaoNegociacao
   inline frProdutor: TFramePesquisa
     Left = 4
     Top = 101
-    Width = 280
+    Width = 276
     Height = 40
     TabOrder = 5
     ExplicitLeft = 4
     ExplicitTop = 101
-    ExplicitWidth = 280
+    ExplicitWidth = 276
     ExplicitHeight = 40
     inherited pnPesquisar: TPanel
-      Left = 245
+      Left = 241
       Width = 35
       Height = 24
       ExplicitLeft = 245
@@ -167,7 +169,7 @@ inherited FormManutencaoNegociacao: TFormManutencaoNegociacao
       end
     end
     inherited sgConsulta: TStringGrid
-      Width = 245
+      Width = 241
       Height = 24
       Enabled = False
       ScrollBars = ssNone
@@ -175,13 +177,14 @@ inherited FormManutencaoNegociacao: TFormManutencaoNegociacao
       ExplicitHeight = 24
     end
     inherited PnTitulos: TPanel
-      Width = 280
+      Width = 276
       ExplicitWidth = 280
       inherited lbCampo: TLabel
+        Height = 15
         Caption = 'Produtor'
       end
       inherited Panel2: TPanel
-        Left = 255
+        Left = 251
         ExplicitLeft = 255
       end
       inherited CkChaveUnica: TCheckBox
@@ -201,15 +204,15 @@ inherited FormManutencaoNegociacao: TFormManutencaoNegociacao
   inline frDistribuidor: TFramePesquisa
     Left = 289
     Top = 102
-    Width = 280
+    Width = 276
     Height = 39
     TabOrder = 6
     ExplicitLeft = 289
     ExplicitTop = 102
-    ExplicitWidth = 280
+    ExplicitWidth = 276
     ExplicitHeight = 39
     inherited pnPesquisar: TPanel
-      Left = 245
+      Left = 241
       Width = 35
       Height = 23
       ExplicitLeft = 245
@@ -220,7 +223,7 @@ inherited FormManutencaoNegociacao: TFormManutencaoNegociacao
       end
     end
     inherited sgConsulta: TStringGrid
-      Width = 245
+      Width = 241
       Height = 23
       Enabled = False
       ScrollBars = ssNone
@@ -228,15 +231,16 @@ inherited FormManutencaoNegociacao: TFormManutencaoNegociacao
       ExplicitHeight = 23
     end
     inherited PnTitulos: TPanel
-      Width = 280
+      Width = 276
       ExplicitWidth = 280
       inherited lbCampo: TLabel
         Width = 54
+        Height = 15
         Caption = 'Distribuidor'
         ExplicitWidth = 54
       end
       inherited Panel2: TPanel
-        Left = 255
+        Left = 251
         ExplicitLeft = 255
       end
       inherited CkChaveUnica: TCheckBox
@@ -341,7 +345,6 @@ inherited FormManutencaoNegociacao: TFormManutencaoNegociacao
       ParentFont = False
       TabOrder = 0
       Transparent = False
-      ExplicitWidth = 143
     end
     object StaticText4: TStaticText
       Left = 142
@@ -362,8 +365,6 @@ inherited FormManutencaoNegociacao: TFormManutencaoNegociacao
       ParentFont = False
       TabOrder = 1
       Transparent = False
-      ExplicitLeft = 144
-      ExplicitWidth = 144
     end
     object StaticText7: TStaticText
       Left = 283
@@ -384,8 +385,6 @@ inherited FormManutencaoNegociacao: TFormManutencaoNegociacao
       ParentFont = False
       TabOrder = 2
       Transparent = False
-      ExplicitLeft = 288
-      ExplicitWidth = 144
     end
     object stDataCadastro: TStaticText
       Left = 1
@@ -406,7 +405,6 @@ inherited FormManutencaoNegociacao: TFormManutencaoNegociacao
       ParentFont = False
       TabOrder = 3
       Transparent = False
-      ExplicitWidth = 143
     end
     object stDataAprovacao: TStaticText
       Left = 142
@@ -427,8 +425,6 @@ inherited FormManutencaoNegociacao: TFormManutencaoNegociacao
       ParentFont = False
       TabOrder = 4
       Transparent = False
-      ExplicitLeft = 144
-      ExplicitWidth = 144
     end
     object stDataConclusao: TStaticText
       Left = 283
@@ -449,8 +445,6 @@ inherited FormManutencaoNegociacao: TFormManutencaoNegociacao
       ParentFont = False
       TabOrder = 5
       Transparent = False
-      ExplicitLeft = 288
-      ExplicitWidth = 144
     end
     object StaticText11: TStaticText
       Left = 424
@@ -471,8 +465,6 @@ inherited FormManutencaoNegociacao: TFormManutencaoNegociacao
       ParentFont = False
       TabOrder = 6
       Transparent = False
-      ExplicitLeft = 432
-      ExplicitWidth = 145
     end
     object stDataCancelamento: TStaticText
       Left = 424
@@ -493,8 +485,6 @@ inherited FormManutencaoNegociacao: TFormManutencaoNegociacao
       ParentFont = False
       TabOrder = 7
       Transparent = False
-      ExplicitLeft = 432
-      ExplicitWidth = 145
     end
   end
   object StaticText6: TStaticText

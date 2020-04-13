@@ -19,6 +19,8 @@ Type
     limite_credito: Double;
     limite_credito_utilizado: Double;
     limite_credito_disponivel: Double;
+    nome_produtor: string;
+    nome_distribuidor: string;
   end;
   TArrayOfWebNegociacao = array of WebNegociacao;
 
@@ -63,6 +65,7 @@ function DeletarNegociacao(con: TConexaoBanco; negociacao_id: Integer): TRetorno
 function BuscarNegociacoes(con: TConexaoBanco; filtros: string): TArrayOfWebNegociacao;
 function BuscaNegociacaoTelaPesquisa(con: TConexaoBanco; filtro: string): TArrayOfTDadosNegociacaoPesq;
 function AlterarStatusNegociacao(con: TConexaoBanco; negociacao_id: Integer; novo_status: string): TRetornoComunicaoBanco;
+function BuscarNegociacoesRelatorio(con: TConexaoBanco; filtros: string): TArrayOfWebNegociacao;
 
 implementation
 
@@ -350,6 +353,65 @@ begin
   end;
 
   FreeAndNil(exec);
+end;
+
+function BuscarNegociacoesRelatorio(con: TConexaoBanco; filtros: string): TArrayOfWebNegociacao;
+var
+  i: Integer;
+  pesq: TPesquisa;
+begin
+  Result := nil;
+  pesq := con.NovaPesquisa;
+
+  pesq.SQL.Add('select ');
+  pesq.SQL.Add('  NEG.NEGOCIACAO_ID,');
+  pesq.SQL.Add('  NEG.PRODUTOR_ID,');
+  pesq.SQL.Add('  NEG.DISTRIBUIDOR_ID,');
+  pesq.SQL.Add('  NEG.STATUS,');
+  pesq.SQL.Add('  NEG.TOTAL,');
+  pesq.SQL.Add('  NEG.DATA_CADASTRO,');
+  pesq.SQL.Add('  NEG.DATA_APROVACAO,');
+  pesq.SQL.Add('  NEG.DATA_CONCLUSAO,');
+  pesq.SQL.Add('  NEG.DATA_CANCELAMENTO,');
+  pesq.SQL.Add('  DIS.RAZAO_SOCIAL as NOME_PRODUTOR,');
+  pesq.SQL.Add('  DIS.RAZAO_SOCIAL as NOME_DISTRIBUIDOR');
+  pesq.SQL.Add('from');
+  pesq.SQL.Add('  NEGOCIACOES NEG');
+
+  pesq.SQL.Add('inner join PESSOAS PRO');
+  pesq.SQL.Add('on NEG.PRODUTOR_ID = PRO.PESSOA_ID');
+
+  pesq.SQL.Add('inner join PESSOAS DfIS');
+  pesq.SQL.Add('on NEG.DISTRIBUIDOR_ID = DIS.PESSOA_ID');
+
+  pesq.SQL.Add('where 1=1');
+  pesq.SQL.Add(filtros);
+
+  if pesq.Pesquisar then begin
+    i := 0;
+    pesq.First;
+    while not pesq.Eof do begin
+      SetLength(Result, Length(Result) + 1);
+
+      Result[i].negociacao_id := pesq.AsColunaInt('NEGOCIACAO_ID');
+      Result[i].produtor_id := pesq.AsColunaInt('PRODUTOR_ID');
+      Result[i].distribuidor_id := pesq.AsColunaInt('DISTRIBUIDOR_ID');
+      Result[i].status := pesq.AsColunaString('STATUS');
+      Result[i].total := pesq.AsColunaDouble('TOTAL');
+      Result[i].data_cadastro := pesq.AsColunaDateTime('DATA_CADASTRO');
+      Result[i].data_aprovacao := pesq.AsColunaDateTime('DATA_APROVACAO');
+      Result[i].data_conclusao := pesq.AsColunaDateTime('DATA_CONCLUSAO');
+      Result[i].data_cancelamento := pesq.AsColunaDateTime('DATA_CANCELAMENTO');
+      Result[i].nome_produtor := pesq.AsColunaString('NOME_PRODUTOR');
+      Result[i].nome_distribuidor := pesq.AsColunaString('NOME_DISTRIBUIDOR');
+
+      Inc(i);
+      pesq.Next;
+    end;
+  end;
+
+  pesq.Active := False;
+  pesq.Free;
 end;
 
 end.
