@@ -42,7 +42,7 @@ type
     procedure frProdutorsgConsultaKeyDown(Sender: TObject; var Key: Word; Shift: TShiftState);
     procedure frDistribuidorsgConsultaKeyDown(Sender: TObject; var Key: Word; Shift: TShiftState);
   private
-    filtro_sql: string;
+    sql_texto: string;
   end;
 
 implementation
@@ -76,31 +76,62 @@ begin
   inherited;
   LimparGrid(sgResultado);
   pcRelacaoNegociacao.ActivePage := tsFiltros;
-  filtro_sql := '';
+
+  sql_texto :=
+    'select ' +
+    '  NEG.NEGOCIACAO_ID, ' +
+    '  case ' +
+    '    NEG.STATUS ' +
+    '    when ''PEN'' then ''Pendente'' ' +
+    '    when ''APR'' then ''Aprovada'' ' +
+    '    when ''CON'' then ''Concluída'' ' +
+    '    when ''CAN'' then ''Cancelada'' ' +
+    '    else ''-'' ' +
+    '  end as STATUS_ANALITICO, ' +
+    '  PRO.RAZAO_SOCIAL as NOME_PRODUTOR, ' +
+    '  DIS.RAZAO_SOCIAL as NOME_DISTRIBUIDOR, ' +
+    '  NEG.TOTAL, ' +
+    '  NEG.DATA_CADASTRO, ' +
+    '  NEG.DATA_APROVACAO, ' +
+    '  NEG.DATA_CONCLUSAO, ' +
+    '  NEG.DATA_CANCELAMENTO ' +
+    'from ' +
+    '  NEGOCIACOES NEG ' +
+
+    'inner join PESSOAS PRO ' +
+    'on NEG.PRODUTOR_ID = PRO.PESSOA_ID ' +
+
+    'inner join PESSOAS DIS ' +
+    'on NEG.DISTRIBUIDOR_ID = DIS.PESSOA_ID ' +
+
+    'where 1=1 ';
 
   if cbFiltros.ItemIndex <> 4 then begin
-    filtro_sql := filtro_sql + ' and NEG.STATUS = ';
+    sql_texto := sql_texto + ' and NEG.STATUS = ';
     if cbFiltros.ItemIndex = 0 then
-      filtro_sql := filtro_sql + QuotedStr('PEN')
+      sql_texto := sql_texto + QuotedStr('PEN')
     else if cbFiltros.ItemIndex = 1 then
-      filtro_sql := filtro_sql + QuotedStr('APR')
+      sql_texto := sql_texto + QuotedStr('APR')
     else if cbFiltros.ItemIndex = 3 then
-      filtro_sql := filtro_sql + QuotedStr('CON')
+      sql_texto := sql_texto + QuotedStr('CON')
     else if cbFiltros.ItemIndex = 4 then
-      filtro_sql := filtro_sql + QuotedStr('CAN');
+      sql_texto := sql_texto + QuotedStr('CAN');
   end;
 
   if not frProdutor.EstaVazio then
-    filtro_sql := filtro_sql + ' and NEG.PRODUTOR_ID = ' + IntToStr(frProdutor.GetCodigo);
+    sql_texto := sql_texto + ' and NEG.PRODUTOR_ID = ' + IntToStr(frProdutor.GetCodigo);
 
   if not frDistribuidor.EstaVazio then
-    filtro_sql := filtro_sql + ' and NEG.DISTRIBUIDOR_ID = ' + IntToStr(frDistribuidor.GetCodigo);
+    sql_texto := sql_texto + ' and NEG.DISTRIBUIDOR_ID = ' + IntToStr(frDistribuidor.GetCodigo);
+
+  sql_texto := sql_texto + ' order by NEG.NEGOCIACAO_ID';
 
   form_msg := TFormProcessamento.Create(Application);
   form_msg.Show;
   form_msg.Update;
+
   try
-    negociacoes := _Negociacao.BuscarNegociacoesRelatorio(Ambiente.con_banco, filtro_sql);
+    negociacoes := _Negociacao.BuscarNegociacoesRelatorio(Ambiente.con_banco, sql_texto);
     if negociacoes = nil then
       Exclamar('Nenhum dado encontrado!')
     else begin
@@ -157,7 +188,7 @@ procedure TFormRelacaoNegociacoes.FormCreate(Sender: TObject);
 begin
   inherited;
   pcRelacaoNegociacao.ActivePage := tsFiltros;
-  filtro_sql := '';
+  sql_texto := '';
 
   IniciarGrid(
     sgResultado,
@@ -228,36 +259,7 @@ begin
   query.Active := False;
   query.Close;
   query.SQLConnection := Ambiente.con_banco.GetConexao;
-  query.CommandText :=
-    'select ' +
-    '  NEG.NEGOCIACAO_ID, ' +
-    '  case ' +
-    '    NEG.STATUS ' +
-    '    when ''PEN'' then ''Pendente'' ' +
-    '    when ''APR'' then ''Aprovada'' ' +
-    '    when ''CON'' then ''Concluída'' ' +
-    '    when ''CAN'' then ''Cancelada'' ' +
-    '    else ''-'' ' +
-    '  end as STATUS_ANALITICO, ' +
-    '  PRO.RAZAO_SOCIAL as NOME_PRODUTOR, ' +
-    '  DIS.RAZAO_SOCIAL as NOME_DISTRIBUIDOR, ' +
-    '  NEG.TOTAL, ' +
-    '  NEG.DATA_CADASTRO, ' +
-    '  NEG.DATA_APROVACAO, ' +
-    '  NEG.DATA_CONCLUSAO, ' +
-    '  NEG.DATA_CANCELAMENTO ' +
-    'from ' +
-    '  NEGOCIACOES NEG ' +
-
-    'inner join PESSOAS PRO ' +
-    'on NEG.PRODUTOR_ID = PRO.PESSOA_ID ' +
-
-    'inner join PESSOAS DIS ' +
-    'on NEG.DISTRIBUIDOR_ID = DIS.PESSOA_ID ' +
-
-    'where 1=1 ' +
-    filtro_sql;
-
+  query.CommandText := sql_texto;
   query.Open;
 
   frxDataSetRelatorio.DataSet := nil;

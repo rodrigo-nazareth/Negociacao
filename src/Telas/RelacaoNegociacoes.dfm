@@ -47,8 +47,6 @@ inherited FormRelacaoNegociacoes: TFormRelacaoNegociacoes
     TabOrder = 1
     object tsFiltros: TTabSheet
       Caption = 'Filtros'
-      ExplicitLeft = -18
-      ExplicitTop = -22
       object Label1: TLabel
         Left = 4
         Top = 10
@@ -59,7 +57,7 @@ inherited FormRelacaoNegociacoes: TFormRelacaoNegociacoes
       object Label2: TLabel
         Left = 0
         Top = 440
-        Width = 184
+        Width = 163
         Height = 13
         Caption = '*Tecle [Delete] para limpar o filtro'
       end

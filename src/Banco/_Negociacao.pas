@@ -3,7 +3,7 @@ unit _Negociacao;
 interface
 
 uses
-  _ConexaoBanco, Biblioteca, System.SysUtils, _ItemNegociacao;
+  _ConexaoBanco, Biblioteca, System.SysUtils, _ItemNegociacao, Data.SqlExpr;
 
 Type
   WebNegociacao = record
@@ -66,7 +66,7 @@ function DeletarNegociacao(con: TConexaoBanco; negociacao_id: Integer): TRetorno
 function BuscarNegociacoes(con: TConexaoBanco; filtros: string): TArrayOfWebNegociacao;
 function BuscaNegociacaoTelaPesquisa(con: TConexaoBanco; filtro: string): TArrayOfTDadosNegociacaoPesq;
 function AlterarStatusNegociacao(con: TConexaoBanco; negociacao_id: Integer; novo_status: string): TRetornoComunicaoBanco;
-function BuscarNegociacoesRelatorio(con: TConexaoBanco; filtros: string): TArrayOfWebNegociacao;
+function BuscarNegociacoesRelatorio(con: TConexaoBanco; sql_texto: string): TArrayOfWebNegociacao;
 
 implementation
 
@@ -358,7 +358,7 @@ begin
   FreeAndNil(exec);
 end;
 
-function BuscarNegociacoesRelatorio(con: TConexaoBanco; filtros: string): TArrayOfWebNegociacao;
+function BuscarNegociacoesRelatorio(con: TConexaoBanco; sql_texto: string): TArrayOfWebNegociacao;
 var
   i: Integer;
   pesq: TPesquisa;
@@ -366,35 +366,7 @@ begin
   Result := nil;
   pesq := con.NovaPesquisa;
 
-  pesq.SQL.Add('select ');
-  pesq.SQL.Add('  NEG.NEGOCIACAO_ID,');
-  pesq.SQL.Add('  case');
-  pesq.SQL.Add('    NEG.STATUS');
-  pesq.SQL.Add('    when ''PEN'' then ''Pendente''');
-  pesq.SQL.Add('    when ''APR'' then ''Aprovada''');
-  pesq.SQL.Add('    when ''CON'' then ''Concluída''');
-  pesq.SQL.Add('    when ''CAN'' then ''Cancelada''');
-  pesq.SQL.Add('    else ''-''');
-  pesq.SQL.Add('  end as STATUS_ANALITICO,');
-  pesq.SQL.Add('  NEG.TOTAL,');
-  pesq.SQL.Add('  NEG.DATA_CADASTRO,');
-  pesq.SQL.Add('  NEG.DATA_APROVACAO,');
-  pesq.SQL.Add('  NEG.DATA_CONCLUSAO,');
-  pesq.SQL.Add('  NEG.DATA_CANCELAMENTO,');
-  pesq.SQL.Add('  PRO.RAZAO_SOCIAL as NOME_PRODUTOR,');
-  pesq.SQL.Add('  DIS.RAZAO_SOCIAL as NOME_DISTRIBUIDOR');
-  pesq.SQL.Add('from');
-  pesq.SQL.Add('  NEGOCIACOES NEG');
-
-  pesq.SQL.Add('inner join PESSOAS PRO');
-  pesq.SQL.Add('on NEG.PRODUTOR_ID = PRO.PESSOA_ID');
-
-  pesq.SQL.Add('inner join PESSOAS DIS');
-  pesq.SQL.Add('on NEG.DISTRIBUIDOR_ID = DIS.PESSOA_ID');
-
-  pesq.SQL.Add('where 1=1');
-  pesq.SQL.Add(filtros);
-
+  pesq.SQL.Add(sql_texto);
   if pesq.Pesquisar then begin
     i := 0;
     pesq.First;
