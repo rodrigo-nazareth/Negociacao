@@ -36,7 +36,9 @@ type
     procedure sgLimitesKeyDown(Sender: TObject; var Key: Word; Shift: TShiftState);
     procedure sgLimitesDblClick(Sender: TObject);
     procedure FormCreate(Sender: TObject);
-    procedure eLimiteKeyDown(Sender: TObject; var Key: Word; Shift: TShiftState);  private
+    procedure eLimiteKeyDown(Sender: TObject; var Key: Word; Shift: TShiftState);
+    procedure eLimiteEnter(Sender: TObject);
+    procedure eLimiteClick(Sender: TObject);  private
     procedure ConfigurarCampoCpfCnpj(cpf_cnpj: string);
   private
     tipo_pessoa: string;
@@ -131,6 +133,18 @@ begin
 
   TotalizarLimite;
   pessoa := nil;
+end;
+
+procedure TFormCadastroPessoa.eLimiteClick(Sender: TObject);
+begin
+  inherited;
+  eLimite.SelectAll;
+end;
+
+procedure TFormCadastroPessoa.eLimiteEnter(Sender: TObject);
+begin
+  inherited;
+  eLimite.SelectAll;
 end;
 
 procedure TFormCadastroPessoa.eLimiteKeyDown(Sender: TObject; var Key: Word; Shift: TShiftState);

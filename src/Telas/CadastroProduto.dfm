@@ -73,6 +73,8 @@ inherited FormCadastroProduto: TFormCadastroProduto
     Enabled = False
     MaxLength = 20
     TabOrder = 2
+    OnClick = ePrecoClick
+    OnEnter = ePrecoEnter
     OnExit = ePrecoExit
     OnKeyDown = TeclaEnter
     OnKeyPress = SoNumerosDbl

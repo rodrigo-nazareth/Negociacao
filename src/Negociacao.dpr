@@ -25,7 +25,8 @@ uses
   FrameBasePesquisa in 'Telas\FrameBasePesquisa.pas' {FramePesquisa: TFrame},
   _PesquisaGenericaFrame in 'Banco\_PesquisaGenericaFrame.pas',
   PesquisaGenericaFrameConsulta in 'Telas\PesquisaGenericaFrameConsulta.pas' {FormPesquisaGenericaFrame},
-  ManutencaoNegociacao in 'Telas\ManutencaoNegociacao.pas' {FormManutencaoNegociacao};
+  ManutencaoNegociacao in 'Telas\ManutencaoNegociacao.pas' {FormManutencaoNegociacao},
+  MensagemProcessamento in 'Telas\MensagemProcessamento.pas' {FormProcessamento};
 
 {$R *.res}
 

@@ -56,6 +56,8 @@ type
     procedure sgItensKeyDown(Sender: TObject; var Key: Word; Shift: TShiftState);
     procedure frProdutorbtnPesquisarClick(Sender: TObject);
     procedure frDistribuidorbtnPesquisarClick(Sender: TObject);
+    procedure eQuantidadeEnter(Sender: TObject);
+    procedure eQuantidadeClick(Sender: TObject);
   private
     status: string;
 
@@ -200,6 +202,18 @@ procedure TFormCadastroNegociacao.eQuantidadeChange(Sender: TObject);
 begin
   inherited;
   eTotal.Text := FormatoMilharStr(Valor(ePreco.Text) * Valor(eQuantidade.Text));
+end;
+
+procedure TFormCadastroNegociacao.eQuantidadeClick(Sender: TObject);
+begin
+  inherited;
+  eQuantidade.SelectAll;
+end;
+
+procedure TFormCadastroNegociacao.eQuantidadeEnter(Sender: TObject);
+begin
+  inherited;
+  eQuantidade.SelectAll;
 end;
 
 procedure TFormCadastroNegociacao.eQuantidadeKeyDown(Sender: TObject; var Key: Word; Shift: TShiftState);

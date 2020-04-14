@@ -301,6 +301,7 @@ begin
     exec.Executar([negociacao_id]);
 
     for i := Low(itens) to High(itens) do begin
+      ite.NovoRegistro;
       ite.NEGOCIACAO_ID := negociacao_id;
       ite.PRODUTO_ID := itens[i].produto_id;
       ite.QUANTIDADE := itens[i].quantidade;
@@ -324,6 +325,7 @@ begin
   end;
 
   FreeAndNil(negoc);
+  FreeAndNil(ite);
   FreeAndNil(exec);
   pesq.Active := False;
   pesq.Free;
@@ -373,7 +375,7 @@ begin
   pesq.SQL.Add('  NEG.DATA_APROVACAO,');
   pesq.SQL.Add('  NEG.DATA_CONCLUSAO,');
   pesq.SQL.Add('  NEG.DATA_CANCELAMENTO,');
-  pesq.SQL.Add('  DIS.RAZAO_SOCIAL as NOME_PRODUTOR,');
+  pesq.SQL.Add('  PRO.RAZAO_SOCIAL as NOME_PRODUTOR,');
   pesq.SQL.Add('  DIS.RAZAO_SOCIAL as NOME_DISTRIBUIDOR');
   pesq.SQL.Add('from');
   pesq.SQL.Add('  NEGOCIACOES NEG');
@@ -381,7 +383,7 @@ begin
   pesq.SQL.Add('inner join PESSOAS PRO');
   pesq.SQL.Add('on NEG.PRODUTOR_ID = PRO.PESSOA_ID');
 
-  pesq.SQL.Add('inner join PESSOAS DfIS');
+  pesq.SQL.Add('inner join PESSOAS DIS');
   pesq.SQL.Add('on NEG.DISTRIBUIDOR_ID = DIS.PESSOA_ID');
 
   pesq.SQL.Add('where 1=1');
@@ -394,8 +396,6 @@ begin
       SetLength(Result, Length(Result) + 1);
 
       Result[i].negociacao_id := pesq.AsColunaInt('NEGOCIACAO_ID');
-      Result[i].produtor_id := pesq.AsColunaInt('PRODUTOR_ID');
-      Result[i].distribuidor_id := pesq.AsColunaInt('DISTRIBUIDOR_ID');
       Result[i].status := pesq.AsColunaString('STATUS');
       Result[i].total := pesq.AsColunaDouble('TOTAL');
       Result[i].data_cadastro := pesq.AsColunaDateTime('DATA_CADASTRO');

@@ -62,6 +62,11 @@ var
 begin
   for i := 0 to Screen.FormCount - 1 do begin
     if Screen.Forms[i].Name <> Self.Name then begin
+      if Screen.Forms[i].Name = '' then begin
+        Screen.Forms[i].Free;
+        Continue;
+      end;
+
       MessageDlg('Ainda existem telas abertas na aplicação!', mtWarning, [mbOK], 0);
       Screen.Forms[i].WindowState := wsNormal;
       Screen.Forms[i].BringToFront;
@@ -84,13 +89,9 @@ end;
 
 procedure TFormPrincipal.miDistribuidorClick(Sender: TObject);
 var
-//  form: TForm;
   i: Integer;
   form_distribuidor: TFormCadastroPessoa;
 begin
-//  form := AbrirForm(TFormCadastroPessoa);
-//  TFormCadastroPessoa(form).SetarTipoPessoa('DIS');
-
   for i := 0 to Screen.FormCount - 1 do begin
     if Screen.Forms[i].ClassName <> 'TFormCadastroPessoa' then
       Continue;
@@ -125,12 +126,9 @@ end;
 
 procedure TFormPrincipal.miProdutorClick(Sender: TObject);
 var
-//  form: TForm;
   i: Integer;
   form_produtor: TFormCadastroPessoa;
 begin
-//  form := AbrirForm(TFormCadastroPessoa);
-//  TFormCadastroPessoa(form).SetarTipoPessoa('PRO');
   for i := 0 to Screen.FormCount - 1 do begin
     if Screen.Forms[i].ClassName <> 'TFormCadastroPessoa' then
       Continue;

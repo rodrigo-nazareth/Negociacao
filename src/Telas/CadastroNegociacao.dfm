@@ -42,21 +42,10 @@ inherited FormCadastroNegociacao: TFormCadastroNegociacao
     ExplicitWidth = 590
     inherited btnSair: TBitBtn
       Left = 509
-      TabOrder = 4
       ExplicitLeft = 509
-    end
-    inherited btnCancelar: TBitBtn
-      TabOrder = 2
-    end
-    inherited btnGravar: TBitBtn
-      TabOrder = 1
-    end
-    inherited btnPesquisar: TBitBtn
-      TabOrder = 0
     end
     inherited btnExcluir: TBitBtn
       Left = 428
-      TabOrder = 3
       ExplicitLeft = 428
     end
   end
@@ -95,7 +84,6 @@ inherited FormCadastroNegociacao: TFormCadastroNegociacao
       Enabled = False
       ScrollBars = ssNone
       OnKeyDown = TeclaEnter
-      ExplicitTop = 15
       ExplicitWidth = 245
       ExplicitHeight = 24
     end
@@ -103,6 +91,7 @@ inherited FormCadastroNegociacao: TFormCadastroNegociacao
       Width = 280
       ExplicitWidth = 280
       inherited lbCampo: TLabel
+        Height = 15
         Caption = 'Produtor'
       end
       inherited Panel2: TPanel
@@ -151,6 +140,7 @@ inherited FormCadastroNegociacao: TFormCadastroNegociacao
       ExplicitWidth = 280
       inherited lbCampo: TLabel
         Width = 54
+        Height = 15
         Caption = 'Distribuidor'
         ExplicitWidth = 54
       end
@@ -452,6 +442,7 @@ inherited FormCadastroNegociacao: TFormCadastroNegociacao
       ExplicitWidth = 280
       inherited lbCampo: TLabel
         Width = 38
+        Height = 15
         Caption = 'Produto'
         ExplicitWidth = 38
       end
@@ -486,6 +477,8 @@ inherited FormCadastroNegociacao: TFormCadastroNegociacao
     Enabled = False
     TabOrder = 8
     OnChange = eQuantidadeChange
+    OnClick = eQuantidadeClick
+    OnEnter = eQuantidadeEnter
     OnKeyDown = TeclaEnter
     OnKeyPress = SoNumerosDbl
   end

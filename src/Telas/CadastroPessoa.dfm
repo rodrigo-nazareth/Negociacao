@@ -159,6 +159,8 @@ inherited FormCadastroPessoa: TFormCadastroPessoa
           inherited pnPesquisar: TPanel
             Left = 247
             Height = 23
+            ExplicitLeft = 247
+            ExplicitHeight = 23
             inherited btnPesquisar: TBitBtn
               Enabled = False
             end
@@ -199,6 +201,8 @@ inherited FormCadastroPessoa: TFormCadastroPessoa
           Alignment = taRightJustify
           Enabled = False
           TabOrder = 1
+          OnClick = eLimiteClick
+          OnEnter = eLimiteEnter
           OnExit = FormatarCampoValorDbl
           OnKeyDown = eLimiteKeyDown
           OnKeyPress = SoNumerosDbl

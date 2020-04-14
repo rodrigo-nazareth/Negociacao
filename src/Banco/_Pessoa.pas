@@ -159,6 +159,7 @@ begin
       pessoa.Alterar;
 
     for i := Low(limites) to High(limites) do begin
+      lim.NovoRegistro;
       lim.PRODUTOR_ID := pessoa_id;
       lim.DISTRIBUIDOR_ID := limites[i].distribuidor_id;
       lim.LIMITE_CREDITO := limites[i].limite_credito;
@@ -189,6 +190,7 @@ begin
   end;
 
   FreeAndNil(pessoa);
+  FreeAndNil(lim);
   pesq.Active := False;
   pesq.Free;
 end;

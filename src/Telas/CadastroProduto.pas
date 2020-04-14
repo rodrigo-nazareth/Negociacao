@@ -15,6 +15,8 @@ type
     ePreco: TLabeledEdit;
     procedure eCodigoKeyDown(Sender: TObject; var Key: Word; Shift: TShiftState);
     procedure ePrecoExit(Sender: TObject);
+    procedure ePrecoEnter(Sender: TObject);
+    procedure ePrecoClick(Sender: TObject);
   private
     { Private declarations }
   protected
@@ -67,6 +69,18 @@ begin
   ePrecoExit(nil);
 
   produto := nil;
+end;
+
+procedure TFormCadastroProduto.ePrecoClick(Sender: TObject);
+begin
+  inherited;
+  ePreco.SelectAll;
+end;
+
+procedure TFormCadastroProduto.ePrecoEnter(Sender: TObject);
+begin
+  inherited;
+  ePreco.SelectAll;
 end;
 
 procedure TFormCadastroProduto.ePrecoExit(Sender: TObject);

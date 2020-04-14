@@ -79,6 +79,7 @@ type
     procedure Inserir;
     procedure Alterar;
     procedure Deletar;
+    procedure NovoRegistro;
   end;
 
 implementation
@@ -445,6 +446,11 @@ begin
   finally
     exec.Free;
   end;
+end;
+
+procedure TTabela.NovoRegistro;
+begin
+  colunas := nil;
 end;
 
 function TPesquisa.AsColunaVariant(coluna: string): Variant;

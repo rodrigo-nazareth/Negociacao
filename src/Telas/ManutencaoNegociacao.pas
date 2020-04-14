@@ -5,7 +5,7 @@ interface
 uses
   Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants, System.Classes, Vcl.Graphics,
   Vcl.Controls, Vcl.Forms, Vcl.Dialogs, _FormBase, Vcl.StdCtrls, Vcl.Buttons,
-  Vcl.ExtCtrls, FrameBasePesquisa;
+  Vcl.ExtCtrls, FrameBasePesquisa, System.UITypes;
 
 type
   TFormManutencaoNegociacao = class(TFormBase)
@@ -140,7 +140,6 @@ end;
 
 procedure TFormManutencaoNegociacao.eCodigoKeyDown(Sender: TObject; var Key: Word; Shift: TShiftState);
 var
-  i: Integer;
   negoc: TArrayOfWebNegociacao;
 begin
   inherited;
