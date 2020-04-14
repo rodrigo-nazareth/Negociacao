@@ -43,6 +43,7 @@ type
     procedure AbrirTransacao;
     procedure FecharTransacao;
     procedure VoltarTransacao;
+    function  GetConexao: TSQLConnection;
   end;
 
   TExecucao = class(TComponent)
@@ -140,6 +141,11 @@ begin
   conexao_banco.CommitFreeAndNil(transacao);
 end;
 
+function TConexaoBanco.GetConexao: TSQLConnection;
+begin
+  Result := conexao_banco;
+end;
+
 function TConexaoBanco.NovaPesquisa: TPesquisa;
 begin
   Result := TPesquisa.Create(Self);
@@ -228,8 +234,6 @@ begin
   Result := not IsEmpty;
 end;
 
-{ TExecucao }
-
 constructor TExecucao.Create(c: TConexaoBanco);
 begin
   inherited Create(c);
@@ -276,8 +280,6 @@ procedure TExecucao.SetSql(_sql: string);
 begin
   sql := _sql;
 end;
-
-{ TTabela }
 
 procedure TTabela.AddColuna(coluna: string; valor: Variant; tipo_coluna: TColuna = tpCampo);
 begin

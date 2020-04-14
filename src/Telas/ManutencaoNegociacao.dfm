@@ -180,7 +180,6 @@ inherited FormManutencaoNegociacao: TFormManutencaoNegociacao
       Width = 276
       ExplicitWidth = 280
       inherited lbCampo: TLabel
-        Height = 15
         Caption = 'Produtor'
       end
       inherited Panel2: TPanel
@@ -235,7 +234,6 @@ inherited FormManutencaoNegociacao: TFormManutencaoNegociacao
       ExplicitWidth = 280
       inherited lbCampo: TLabel
         Width = 54
-        Height = 15
         Caption = 'Distribuidor'
         ExplicitWidth = 54
       end

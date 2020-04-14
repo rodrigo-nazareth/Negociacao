@@ -14,7 +14,7 @@ inherited FormRelacaoNegociacoes: TFormRelacaoNegociacoes
     ExplicitTop = 484
     ExplicitWidth = 940
     object sbImprimir: TSpeedButton [0]
-      Left = 405
+      Left = 425
       Top = 2
       Width = 75
       Height = 25
@@ -42,17 +42,26 @@ inherited FormRelacaoNegociacoes: TFormRelacaoNegociacoes
     Top = 0
     Width = 940
     Height = 484
-    ActivePage = tsResultado
+    ActivePage = tsFiltros
     Align = alClient
     TabOrder = 1
     object tsFiltros: TTabSheet
       Caption = 'Filtros'
+      ExplicitLeft = -18
+      ExplicitTop = -22
       object Label1: TLabel
         Left = 4
         Top = 10
         Width = 31
         Height = 13
         Caption = 'Status'
+      end
+      object Label2: TLabel
+        Left = 0
+        Top = 440
+        Width = 184
+        Height = 13
+        Caption = '*Tecle [Delete] para limpar o filtro'
       end
       inline frProdutor: TFramePesquisa
         Left = 4
@@ -76,6 +85,7 @@ inherited FormRelacaoNegociacoes: TFormRelacaoNegociacoes
           Width = 245
           Height = 24
           ScrollBars = ssNone
+          OnKeyDown = frProdutorsgConsultaKeyDown
           ExplicitWidth = 245
           ExplicitHeight = 24
         end
@@ -83,8 +93,10 @@ inherited FormRelacaoNegociacoes: TFormRelacaoNegociacoes
           Width = 280
           ExplicitWidth = 280
           inherited lbCampo: TLabel
+            Width = 48
             Height = 15
-            Caption = 'Produtor'
+            Caption = 'Produtor*'
+            ExplicitWidth = 48
           end
           inherited Panel2: TPanel
             Left = 255
@@ -106,12 +118,12 @@ inherited FormRelacaoNegociacoes: TFormRelacaoNegociacoes
       end
       inline frDistribuidor: TFramePesquisa
         Left = 4
-        Top = 110
+        Top = 120
         Width = 280
         Height = 39
         TabOrder = 2
         ExplicitLeft = 4
-        ExplicitTop = 110
+        ExplicitTop = 120
         ExplicitWidth = 280
         ExplicitHeight = 39
         inherited pnPesquisar: TPanel
@@ -126,6 +138,7 @@ inherited FormRelacaoNegociacoes: TFormRelacaoNegociacoes
           Width = 245
           Height = 23
           ScrollBars = ssNone
+          OnKeyDown = frDistribuidorsgConsultaKeyDown
           ExplicitWidth = 245
           ExplicitHeight = 23
         end
@@ -133,10 +146,10 @@ inherited FormRelacaoNegociacoes: TFormRelacaoNegociacoes
           Width = 280
           ExplicitWidth = 280
           inherited lbCampo: TLabel
-            Width = 54
+            Width = 60
             Height = 15
-            Caption = 'Distribuidor'
-            ExplicitWidth = 54
+            Caption = 'Distribuidor*'
+            ExplicitWidth = 60
           end
           inherited Panel2: TPanel
             Left = 255
@@ -189,20 +202,16 @@ inherited FormRelacaoNegociacoes: TFormRelacaoNegociacoes
         RowCount = 2
         Options = [goFixedVertLine, goFixedHorzLine, goHorzLine]
         TabOrder = 0
-        ExplicitLeft = -269
-        ExplicitTop = 213
-        ExplicitWidth = 910
-        ExplicitHeight = 312
         ColWidths = (
-          53
-          101
-          166
-          142
+          68
+          90
+          160
+          134
           96
           92
           84
           80
-          81)
+          94)
       end
       object stAtalhos: TStaticText
         Left = 0
@@ -235,15 +244,19 @@ inherited FormRelacaoNegociacoes: TFormRelacaoNegociacoes
     PrintOptions.Printer = 'Default'
     PrintOptions.PrintOnSheet = 0
     ReportOptions.CreateDate = 43934.895337013900000000
-    ReportOptions.LastChange = 43935.059921585600000000
+    ReportOptions.LastChange = 43935.595271099500000000
     ScriptLanguage = 'PascalScript'
     ScriptText.Strings = (
       'begin'
       ''
       'end.')
-    Left = 109
-    Top = 292
-    Datasets = <>
+    Left = 649
+    Top = 263
+    Datasets = <
+      item
+        DataSet = frxDataSetRelatorio
+        DataSetName = 'frxDataSetRelatorio'
+      end>
     Variables = <>
     Style = <
       item
@@ -272,150 +285,427 @@ inherited FormRelacaoNegociacoes: TFormRelacaoNegociacoes
         Height = 154.960730000000000000
         Top = 18.897650000000000000
         Width = 1046.929810000000000000
-        object SysMemo1: TfrxSysMemoView
-          Left = 211.653680000000000000
-          Top = 109.606370000000000000
-          Width = 56.692950000000000000
-          Height = 18.897650000000000000
-          Memo.UTF8W = (
-            'asfasdf')
-        end
         object Memo1: TfrxMemoView
-          Left = 120.944960000000000000
-          Top = 71.811070000000000000
-          Width = 94.488250000000000000
-          Height = 18.897650000000000000
+          Align = baCenter
+          Left = 274.015925000000000000
+          Top = 41.574830000000000000
+          Width = 498.897960000000000000
+          Height = 45.354360000000000000
+          Font.Charset = DEFAULT_CHARSET
+          Font.Color = clBlack
+          Font.Height = -40
+          Font.Name = 'Arial'
+          Font.Style = [fsBold]
+          Memo.UTF8W = (
+            'Relat'#243'rio de Negocia'#231#245'es')
+          ParentFont = False
         end
         object SysMemo2: TfrxSysMemoView
-          Left = 865.512370000000000000
-          Top = 3.779530000000000000
-          Width = 124.724490000000000000
+          Left = 978.898270000000000000
+          Width = 68.031540000000000000
           Height = 18.897650000000000000
+          HAlign = haRight
           Memo.UTF8W = (
             '[DATE]')
+        end
+        object SysMemo1: TfrxSysMemoView
+          Left = 1005.354980000000000000
+          Top = 22.677180000000000000
+          Width = 41.574830000000000000
+          Height = 18.897650000000000000
+          HAlign = haRight
+          Memo.UTF8W = (
+            '[PAGE#]')
+        end
+        object Line1: TfrxLineView
+          Left = 3.779530000000000000
+          Top = 147.401670000000000000
+          Width = 1046.929810000000000000
+          Color = clBlack
+          Frame.Typ = [ftTop]
+        end
+        object SysMemo4: TfrxSysMemoView
+          Left = 963.780150000000000000
+          Top = 22.677180000000000000
+          Width = 45.354360000000000000
+          Height = 18.897650000000000000
+          HAlign = haRight
+          Memo.UTF8W = (
+            'P'#225'g.:')
         end
       end
       object MasterData1: TfrxMasterData
         FillType = ftBrush
         Height = 22.677180000000000000
-        Top = 298.582870000000000000
+        Top = 283.464750000000000000
         Width = 1046.929810000000000000
         Columns = 1
-        DataSetName = 'frxTeste'
-        RowCount = 1
-        object frxTesteNEGOCIACAO_ID: TfrxMemoView
-          Left = 34.015770000000000000
-          Width = 192.756030000000000000
+        DataSet = frxDataSetRelatorio
+        DataSetName = 'frxDataSetRelatorio'
+        RowCount = 0
+        object frxDataSetRelatorioNEGOCIACAO_ID: TfrxMemoView
+          Width = 79.370078740000000000
           Height = 18.897650000000000000
           DataField = 'NEGOCIACAO_ID'
-          DataSetName = 'frxTeste'
+          DataSet = frxDataSetRelatorio
+          DataSetName = 'frxDataSetRelatorio'
+          HAlign = haRight
           Memo.UTF8W = (
-            '[frxTeste."NEGOCIACAO_ID"]')
+            '[frxDataSetRelatorio."NEGOCIACAO_ID"]')
+        end
+        object frxDataSetRelatorioNOME_PRODUTOR: TfrxMemoView
+          Left = 166.299320000000000000
+          Width = 207.874150000000000000
+          Height = 18.897650000000000000
+          DataField = 'NOME_PRODUTOR'
+          DataSet = frxDataSetRelatorio
+          DataSetName = 'frxDataSetRelatorio'
+          Memo.UTF8W = (
+            '[frxDataSetRelatorio."NOME_PRODUTOR"]')
+        end
+        object frxDataSetRelatorioNOME_DISTRIBUIDOR: TfrxMemoView
+          Left = 377.173470000000000000
+          Width = 207.874150000000000000
+          Height = 18.897650000000000000
+          DataField = 'NOME_DISTRIBUIDOR'
+          DataSet = frxDataSetRelatorio
+          DataSetName = 'frxDataSetRelatorio'
+          Memo.UTF8W = (
+            '[frxDataSetRelatorio."NOME_DISTRIBUIDOR"]')
+        end
+        object frxDataSetRelatorioTOTAL: TfrxMemoView
+          Left = 593.386210000000000000
+          Width = 75.590600000000000000
+          Height = 18.897650000000000000
+          DataField = 'TOTAL'
+          DataSet = frxDataSetRelatorio
+          DataSetName = 'frxDataSetRelatorio'
+          DisplayFormat.DecimalSeparator = ','
+          DisplayFormat.FormatStr = '%2.2n'
+          DisplayFormat.Kind = fkNumeric
+          HAlign = haRight
+          Memo.UTF8W = (
+            '[frxDataSetRelatorio."TOTAL"]')
+        end
+        object frxDataSetRelatorioDATA_CADASTRO: TfrxMemoView
+          Left = 672.756340000000000000
+          Width = 79.370130000000000000
+          Height = 18.897650000000000000
+          DataField = 'DATA_CADASTRO'
+          DataSet = frxDataSetRelatorio
+          DataSetName = 'frxDataSetRelatorio'
+          Memo.UTF8W = (
+            '[frxDataSetRelatorio."DATA_CADASTRO"]')
+        end
+        object frxDataSetRelatorioDATA_APROVACAO: TfrxMemoView
+          Left = 755.905514250000000000
+          Width = 90.708658980000000000
+          Height = 18.897650000000000000
+          DataField = 'DATA_APROVACAO'
+          DataSet = frxDataSetRelatorio
+          DataSetName = 'frxDataSetRelatorio'
+          Memo.UTF8W = (
+            '[frxDataSetRelatorio."DATA_APROVACAO"]')
+        end
+        object frxDataSetRelatorioDATA_CONCLUSAO: TfrxMemoView
+          Left = 846.614173228346000000
+          Width = 86.929133858267700000
+          Height = 18.897650000000000000
+          DataField = 'DATA_CONCLUSAO'
+          DataSet = frxDataSetRelatorio
+          DataSetName = 'frxDataSetRelatorio'
+          Memo.UTF8W = (
+            '[frxDataSetRelatorio."DATA_CONCLUSAO"]')
+        end
+        object frxDataSetRelatorioDATA_CANCELAMENTO: TfrxMemoView
+          Left = 937.322834650000000000
+          Width = 109.606299210000000000
+          Height = 18.897650000000000000
+          DataField = 'DATA_CANCELAMENTO'
+          DataSet = frxDataSetRelatorio
+          DataSetName = 'frxDataSetRelatorio'
+          Memo.UTF8W = (
+            '[frxDataSetRelatorio."DATA_CANCELAMENTO"]')
+        end
+        object frxDataSetRelatorioSTATUS_ANALITICO: TfrxMemoView
+          Left = 79.370130000000000000
+          Width = 83.149660000000000000
+          Height = 18.897650000000000000
+          DataField = 'STATUS_ANALITICO'
+          DataSet = frxDataSetRelatorio
+          DataSetName = 'frxDataSetRelatorio'
+          HAlign = haCenter
+          Memo.UTF8W = (
+            '[frxDataSetRelatorio."STATUS_ANALITICO"]')
         end
       end
       object PageHeader1: TfrxPageHeader
         FillType = ftBrush
-        Height = 41.574830000000000000
+        Height = 26.456710000000000000
         Top = 196.535560000000000000
         Width = 1046.929810000000000000
         object Memo2: TfrxMemoView
-          Left = 11.338590000000000000
-          Top = 15.118120000000000000
-          Width = 113.385900000000000000
+          Description = 'Negocia'#231#227'o'
+          Width = 79.370130000000000000
           Height = 18.897650000000000000
+          Font.Charset = DEFAULT_CHARSET
+          Font.Color = clBlack
+          Font.Height = -13
+          Font.Name = 'Arial'
+          Font.Style = [fsBold]
+          HAlign = haRight
           Memo.UTF8W = (
-            'saa')
+            'Negocia'#231#227'o')
+          ParentFont = False
         end
         object Memo3: TfrxMemoView
-          Left = 158.740260000000000000
-          Top = 11.338590000000000000
-          Width = 34.015770000000000000
-          Height = 15.118120000000000000
+          Left = 79.370130000000000000
+          Width = 83.149660000000000000
+          Height = 18.897650000000000000
+          Font.Charset = DEFAULT_CHARSET
+          Font.Color = clBlack
+          Font.Height = -13
+          Font.Name = 'Arial'
+          Font.Style = [fsBold]
+          HAlign = haCenter
           Memo.UTF8W = (
-            'safd')
+            'Status')
+          ParentFont = False
+        end
+        object Memo4: TfrxMemoView
+          Left = 166.299320000000000000
+          Width = 207.874018190000000000
+          Height = 18.897650000000000000
+          Font.Charset = DEFAULT_CHARSET
+          Font.Color = clBlack
+          Font.Height = -13
+          Font.Name = 'Arial'
+          Font.Style = [fsBold]
+          Memo.UTF8W = (
+            'Produtor')
+          ParentFont = False
+        end
+        object Memo5: TfrxMemoView
+          Left = 377.196840630000000000
+          Width = 211.653543310000000000
+          Height = 18.897650000000000000
+          Font.Charset = DEFAULT_CHARSET
+          Font.Color = clBlack
+          Font.Height = -13
+          Font.Name = 'Arial'
+          Font.Style = [fsBold]
+          Memo.UTF8W = (
+            'Distribuidor')
+          ParentFont = False
+        end
+        object Memo6: TfrxMemoView
+          Left = 597.165354330709000000
+          Width = 71.811070000000000000
+          Height = 18.897650000000000000
+          Font.Charset = DEFAULT_CHARSET
+          Font.Color = clBlack
+          Font.Height = -13
+          Font.Name = 'Arial'
+          Font.Style = [fsBold]
+          HAlign = haRight
+          Memo.UTF8W = (
+            'Total')
+          ParentFont = False
+        end
+        object Memo7: TfrxMemoView
+          Left = 672.755881100000000000
+          Width = 79.370130000000000000
+          Height = 18.897650000000000000
+          Font.Charset = DEFAULT_CHARSET
+          Font.Color = clBlack
+          Font.Height = -13
+          Font.Name = 'Arial'
+          Font.Style = [fsBold]
+          Memo.UTF8W = (
+            'Dt cadastro')
+          ParentFont = False
+        end
+        object Memo8: TfrxMemoView
+          Left = 755.905484960000000000
+          Width = 90.708720000000000000
+          Height = 18.897650000000000000
+          Font.Charset = DEFAULT_CHARSET
+          Font.Color = clBlack
+          Font.Height = -13
+          Font.Name = 'Arial'
+          Font.Style = [fsBold]
+          Memo.UTF8W = (
+            'Dt aprova'#231#227'o')
+          ParentFont = False
+        end
+        object Memo9: TfrxMemoView
+          Left = 846.614151260000000000
+          Width = 86.929190000000000000
+          Height = 18.897650000000000000
+          Font.Charset = DEFAULT_CHARSET
+          Font.Color = clBlack
+          Font.Height = -13
+          Font.Name = 'Arial'
+          Font.Style = [fsBold]
+          Memo.UTF8W = (
+            'Dt conclus'#227'o')
+          ParentFont = False
+        end
+        object Memo10: TfrxMemoView
+          Left = 937.322815120000000000
+          Width = 109.606318740000000000
+          Height = 18.897650000000000000
+          Font.Charset = DEFAULT_CHARSET
+          Font.Color = clBlack
+          Font.Height = -13
+          Font.Name = 'Arial'
+          Font.Style = [fsBold]
+          Memo.UTF8W = (
+            'Dt cancelamento')
+          ParentFont = False
+        end
+        object Line2: TfrxLineView
+          Left = 3.779530000000000000
+          Top = 22.677180000000000000
+          Width = 1046.929810000000000000
+          Color = clBlack
+          Frame.Typ = [ftTop]
+        end
+      end
+      object PageFooter1: TfrxPageFooter
+        FillType = ftBrush
+        Height = 22.677180000000000000
+        Top = 366.614410000000000000
+        Width = 1046.929810000000000000
+        object SysMemo3: TfrxSysMemoView
+          Left = 944.882500000000000000
+          Width = 102.047310000000000000
+          Height = 18.897650000000000000
+          DisplayFormat.FormatStr = '%2.2n'
+          DisplayFormat.Kind = fkNumeric
+          Font.Charset = DEFAULT_CHARSET
+          Font.Color = clBlack
+          Font.Height = -13
+          Font.Name = 'Arial'
+          Font.Style = [fsBold]
+          HAlign = haRight
+          Memo.UTF8W = (
+            '[SUM(<frxDataSetRelatorio."TOTAL">,MasterData1)]')
+          ParentFont = False
+        end
+        object Memo11: TfrxMemoView
+          Left = 801.260360000000000000
+          Width = 143.622140000000000000
+          Height = 18.897650000000000000
+          Font.Charset = DEFAULT_CHARSET
+          Font.Color = clBlack
+          Font.Height = -13
+          Font.Name = 'Arial'
+          Font.Style = [fsBold]
+          HAlign = haRight
+          Memo.UTF8W = (
+            'Total negocia'#231#245'es:')
+          ParentFont = False
         end
       end
     end
   end
-  object scConexao: TSQLConnection
-    ConnectionName = 'FBConnection'
-    DriverName = 'Firebird'
-    LoginPrompt = False
-    Params.Strings = (
-      'DriverUnit=Data.DBXFirebird'
-      
-        'DriverPackageLoader=TDBXDynalinkDriverLoader,DbxCommonDriver220.' +
-        'bpl'
-      
-        'DriverAssemblyLoader=Borland.Data.TDBXDynalinkDriverLoader,Borla' +
-        'nd.Data.DbxCommonDriver,Version=22.0.0.0,Culture=neutral,PublicK' +
-        'eyToken=91d62ebb5b0d1b1b'
-      
-        'MetaDataPackageLoader=TDBXFirebirdMetaDataCommandFactory,DbxFire' +
-        'birdDriver220.bpl'
-      
-        'MetaDataAssemblyLoader=Borland.Data.TDBXFirebirdMetaDataCommandF' +
-        'actory,Borland.Data.DbxFirebirdDriver,Version=22.0.0.0,Culture=n' +
-        'eutral,PublicKeyToken=91d62ebb5b0d1b1b'
-      'GetDriverFunc=getSQLDriverINTERBASE'
-      'LibraryName=dbxfb.dll'
-      'LibraryNameOsx=libsqlfb.dylib'
-      'VendorLib=fbclient.dll'
-      'VendorLibWin64=fbclient.dll'
-      'VendorLibOsx=/Library/Frameworks/Firebird.framework/Firebird'
-      'Role=RoleName'
-      'MaxBlobSize=-1'
-      'TrimChar=False'
-      'DriverName=Firebird'
-      'Database=localhost:E:\Projetos\SIAGRI\data\DADOS.FDB'
-      'RoleName=RoleName'
-      'User_Name=sysdba'
-      'Password=masterkey'
-      'ServerCharSet='
-      'SQLDialect=3'
-      'ErrorResourceFile='
-      'LocaleCode=0000'
-      'BlobSize=-1'
-      'CommitRetain=False'
-      'WaitOnLocks=True'
-      'IsolationLevel=ReadCommitted'
-      'Trim Char=False')
-    Connected = True
-    Left = 118
-    Top = 109
-  end
   object query: TSQLDataSet
-    CommandText = 'LIMITES_CREDITO_PRODUTOR'
+    CommandText = 
+      'select'#13#10'  NEG.NEGOCIACAO_ID,'#13#10'  case'#13#10'    NEG.STATUS'#13#10'    when '#39 +
+      'PEN'#39' then '#39'Pendente'#39#13#10'    when '#39'APR'#39' then '#39'Aprovada'#39#13#10'    when '#39 +
+      'CON'#39' then '#39'Conclu'#237'da'#39#13#10'    when '#39'CAN'#39' then '#39'Cancelada'#39#13#10'    else' +
+      ' '#39'-'#39#13#10'  end as STATUS_ANALITICO,'#13#10'  PRO.RAZAO_SOCIAL as NOME_PRO' +
+      'DUTOR,'#13#10'  DIS.RAZAO_SOCIAL as NOME_DISTRIBUIDOR,'#13#10'  NEG.TOTAL,'#13#10 +
+      '  NEG.DATA_CADASTRO,'#13#10'  NEG.DATA_APROVACAO,'#13#10'  NEG.DATA_CONCLUSA' +
+      'O,'#13#10'  NEG.DATA_CANCELAMENTO'#13#10'from'#13#10'  NEGOCIACOES NEG'#13#10#13#10'inner jo' +
+      'in PESSOAS PRO'#13#10'on NEG.PRODUTOR_ID = PRO.PESSOA_ID'#13#10#13#10'inner join' +
+      ' PESSOAS DIS'#13#10'on NEG.DISTRIBUIDOR_ID = DIS.PESSOA_ID'#13#10#13#10'where 1=' +
+      '1'
     MaxBlobSize = -1
     ParamCheck = False
     Params = <>
-    SQLConnection = scConexao
-    Left = 117
-    Top = 168
+    Left = 649
+    Top = 142
+    object queryNEGOCIACAO_ID: TIntegerField
+      FieldName = 'NEGOCIACAO_ID'
+      Required = True
+    end
+    object stfSTATUS_ANALITICO: TStringField
+      FieldName = 'STATUS_ANALITICO'
+      Required = True
+      FixedChar = True
+      Size = 9
+    end
+    object infNOME_PRODUTOR: TStringField
+      FieldName = 'NOME_PRODUTOR'
+      Required = True
+      Size = 150
+    end
+    object infNOME_DISTRIBUIDOR: TStringField
+      FieldName = 'NOME_DISTRIBUIDOR'
+      Required = True
+      Size = 150
+    end
+    object infTOTAL: TFMTBCDField
+      FieldName = 'TOTAL'
+      Required = True
+      Precision = 18
+      Size = 2
+    end
+    object infDATA_CADASTRO: TDateField
+      FieldName = 'DATA_CADASTRO'
+      Required = True
+    end
+    object infDATA_APROVACAO: TDateField
+      FieldName = 'DATA_APROVACAO'
+    end
+    object infDATA_CONCLUSAO: TDateField
+      FieldName = 'DATA_CONCLUSAO'
+    end
+    object infDATA_CANCELAMENTO: TDateField
+      FieldName = 'DATA_CANCELAMENTO'
+    end
   end
   object frxDataSetRelatorio: TfrxDBDataset
     UserName = 'frxDataSetRelatorio'
     CloseDataSource = False
     FieldAliases.Strings = (
       'NEGOCIACAO_ID=NEGOCIACAO_ID'
-      'PRODUTOR_ID=PRODUTOR_ID'
-      'DISTRIBUIDOR_ID=DISTRIBUIDOR_ID'
-      'STATUS=STATUS'
+      'STATUS_ANALITICO=STATUS_ANALITICO'
+      'NOME_PRODUTOR=NOME_PRODUTOR'
+      'NOME_DISTRIBUIDOR=NOME_DISTRIBUIDOR'
       'TOTAL=TOTAL'
       'DATA_CADASTRO=DATA_CADASTRO'
       'DATA_APROVACAO=DATA_APROVACAO'
       'DATA_CONCLUSAO=DATA_CONCLUSAO'
-      'DATA_CANCELAMENTO=DATA_CANCELAMENTO'
-      'NOME_PRODUTOR=NOME_PRODUTOR'
-      'NOME_DISTRIBUIDOR=NOME_DISTRIBUIDOR')
-    DataSet = query
+      'DATA_CANCELAMENTO=DATA_CANCELAMENTO')
     BCDToCurrency = False
-    Left = 119
-    Top = 233
+    Left = 649
+    Top = 205
   end
-  object DataSource1: TDataSource
-    DataSet = query
-    Left = 768
-    Top = 87
+  object frxPDFExport1: TfrxPDFExport
+    UseFileCache = True
+    ShowProgress = True
+    OverwritePrompt = False
+    DataOnly = False
+    PrintOptimized = False
+    Outline = False
+    Background = False
+    HTMLTags = True
+    Quality = 95
+    Transparency = False
+    Author = 'FastReport'
+    Subject = 'FastReport PDF export'
+    ProtectionFlags = [ePrint, eModify, eCopy, eAnnot]
+    HideToolbar = False
+    HideMenubar = False
+    HideWindowUI = False
+    FitWindow = False
+    CenterWindow = False
+    PrintScaling = False
+    PdfA = False
+    Left = 646
+    Top = 318
   end
 end

@@ -156,7 +156,7 @@ begin
     Exit;
   end;
 
-  status := negoc[0].status;
+  status := negoc[0].status_sintetico;
 
   novo_registro := False;
   ModoTela(True);

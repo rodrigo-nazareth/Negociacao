@@ -187,7 +187,7 @@ begin
 
   stTotalNegociacao.Caption := FormatoMilharStr(negoc[0].total);
 
-  status := negoc[0].status;
+  status := negoc[0].status_sintetico;
   DefinicaoStatus;
 
   negoc := nil;

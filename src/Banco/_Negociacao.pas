@@ -10,7 +10,8 @@ Type
     negociacao_id: Integer;
     produtor_id: Integer;
     distribuidor_id: Integer;
-    status: string;
+    status_sintetico: string;
+    status_analitico: string;
     total: Double;
     data_cadastro: TDateTime;
     data_aprovacao: TDateTime;
@@ -236,7 +237,7 @@ begin
       Result[i].negociacao_id := pesq.AsColunaInt('NEGOCIACAO_ID');
       Result[i].produtor_id := pesq.AsColunaInt('PRODUTOR_ID');
       Result[i].distribuidor_id := pesq.AsColunaInt('DISTRIBUIDOR_ID');
-      Result[i].status := pesq.AsColunaString('STATUS');
+      Result[i].status_sintetico := pesq.AsColunaString('STATUS');
       Result[i].total := pesq.AsColunaDouble('TOTAL');
       Result[i].data_cadastro := pesq.AsColunaDateTime('DATA_CADASTRO');
       Result[i].data_aprovacao := pesq.AsColunaDateTime('DATA_APROVACAO');
@@ -367,9 +368,14 @@ begin
 
   pesq.SQL.Add('select ');
   pesq.SQL.Add('  NEG.NEGOCIACAO_ID,');
-  pesq.SQL.Add('  NEG.PRODUTOR_ID,');
-  pesq.SQL.Add('  NEG.DISTRIBUIDOR_ID,');
-  pesq.SQL.Add('  NEG.STATUS,');
+  pesq.SQL.Add('  case');
+  pesq.SQL.Add('    NEG.STATUS');
+  pesq.SQL.Add('    when ''PEN'' then ''Pendente''');
+  pesq.SQL.Add('    when ''APR'' then ''Aprovada''');
+  pesq.SQL.Add('    when ''CON'' then ''Concluída''');
+  pesq.SQL.Add('    when ''CAN'' then ''Cancelada''');
+  pesq.SQL.Add('    else ''-''');
+  pesq.SQL.Add('  end as STATUS_ANALITICO,');
   pesq.SQL.Add('  NEG.TOTAL,');
   pesq.SQL.Add('  NEG.DATA_CADASTRO,');
   pesq.SQL.Add('  NEG.DATA_APROVACAO,');
@@ -396,7 +402,6 @@ begin
       SetLength(Result, Length(Result) + 1);
 
       Result[i].negociacao_id := pesq.AsColunaInt('NEGOCIACAO_ID');
-      Result[i].status := pesq.AsColunaString('STATUS');
       Result[i].total := pesq.AsColunaDouble('TOTAL');
       Result[i].data_cadastro := pesq.AsColunaDateTime('DATA_CADASTRO');
       Result[i].data_aprovacao := pesq.AsColunaDateTime('DATA_APROVACAO');
@@ -404,6 +409,7 @@ begin
       Result[i].data_cancelamento := pesq.AsColunaDateTime('DATA_CANCELAMENTO');
       Result[i].nome_produtor := pesq.AsColunaString('NOME_PRODUTOR');
       Result[i].nome_distribuidor := pesq.AsColunaString('NOME_DISTRIBUIDOR');
+      Result[i].status_analitico := pesq.AsColunaString('STATUS_ANALITICO');
 
       Inc(i);
       pesq.Next;

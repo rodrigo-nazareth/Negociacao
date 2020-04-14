@@ -7,7 +7,7 @@ uses
   Vcl.Controls, Vcl.Forms, Vcl.Dialogs, _FormBase, Vcl.Buttons, Vcl.ExtCtrls,
   Vcl.ComCtrls, Vcl.StdCtrls, Vcl.Grids, FrameBasePesquisa, frxClass, frxPreview,
   Data.FMTBcd, Data.DB, Data.SqlExpr, Datasnap.DBClient, Data.DBXFirebird,
-  frxDBSet, Vcl.DBGrids;
+  frxDBSet, Vcl.DBGrids, frxExportPDF;
 
 type
   TFormRelacaoNegociacoes = class(TFormBase)
@@ -23,17 +23,26 @@ type
     sbImprimir: TSpeedButton;
     btnProcessar: TBitBtn;
     frxRelatorio: TfrxReport;
-    scConexao: TSQLConnection;
     query: TSQLDataSet;
     frxDataSetRelatorio: TfrxDBDataset;
-    DataSource1: TDataSource;
+    queryNEGOCIACAO_ID: TIntegerField;
+    infTOTAL: TFMTBCDField;
+    infDATA_CADASTRO: TDateField;
+    infDATA_APROVACAO: TDateField;
+    infDATA_CONCLUSAO: TDateField;
+    infDATA_CANCELAMENTO: TDateField;
+    infNOME_PRODUTOR: TStringField;
+    infNOME_DISTRIBUIDOR: TStringField;
+    stfSTATUS_ANALITICO: TStringField;
+    frxPDFExport1: TfrxPDFExport;
+    Label2: TLabel;
     procedure FormCreate(Sender: TObject);
     procedure sbImprimirClick(Sender: TObject);
     procedure btnProcessarClick(Sender: TObject);
+    procedure frProdutorsgConsultaKeyDown(Sender: TObject; var Key: Word; Shift: TShiftState);
+    procedure frDistribuidorsgConsultaKeyDown(Sender: TObject; var Key: Word; Shift: TShiftState);
   private
-    { Private declarations }
-  public
-    { Public declarations }
+    filtro_sql: string;
   end;
 
 implementation
@@ -60,7 +69,6 @@ procedure TFormRelacaoNegociacoes.btnProcessarClick(Sender: TObject);
 var
   i: Integer;
   linha: Integer;
-  filtros: string;
   total_negociacoes: Double;
   negociacoes: TArrayOfWebNegociacao;
   form_msg: TFormProcessamento;
@@ -68,37 +76,31 @@ begin
   inherited;
   LimparGrid(sgResultado);
   pcRelacaoNegociacao.ActivePage := tsFiltros;
-
-  ValidarCampo(
-    frProdutor.EstaVazio and frDistribuidor.EstaVazio,
-    'É necessário informar ao menos um filtros (produtor ou distribuidor)!',
-    frProdutor.sgConsulta
-  );
+  filtro_sql := '';
 
   if cbFiltros.ItemIndex <> 4 then begin
-    filtros := filtros + ' and NEG.STATUS = ';
+    filtro_sql := filtro_sql + ' and NEG.STATUS = ';
     if cbFiltros.ItemIndex = 0 then
-      filtros := filtros + QuotedStr('PEN')
+      filtro_sql := filtro_sql + QuotedStr('PEN')
     else if cbFiltros.ItemIndex = 1 then
-      filtros := filtros + QuotedStr('APR')
+      filtro_sql := filtro_sql + QuotedStr('APR')
     else if cbFiltros.ItemIndex = 3 then
-      filtros := filtros + QuotedStr('CON')
+      filtro_sql := filtro_sql + QuotedStr('CON')
     else if cbFiltros.ItemIndex = 4 then
-      filtros := filtros + QuotedStr('CAN');
+      filtro_sql := filtro_sql + QuotedStr('CAN');
   end;
 
   if not frProdutor.EstaVazio then
-    filtros := filtros + ' and NEG.PRODUTOR_ID = ' + IntToStr(frProdutor.GetCodigo);
+    filtro_sql := filtro_sql + ' and NEG.PRODUTOR_ID = ' + IntToStr(frProdutor.GetCodigo);
 
   if not frDistribuidor.EstaVazio then
-    filtros := filtros + ' and NEG.DISTRIBUIDOR_ID = ' + IntToStr(frDistribuidor.GetCodigo);
-
+    filtro_sql := filtro_sql + ' and NEG.DISTRIBUIDOR_ID = ' + IntToStr(frDistribuidor.GetCodigo);
 
   form_msg := TFormProcessamento.Create(Application);
   form_msg.Show;
   form_msg.Update;
   try
-    negociacoes := _Negociacao.BuscarNegociacoesRelatorio(Ambiente.con_banco, filtros);
+    negociacoes := _Negociacao.BuscarNegociacoesRelatorio(Ambiente.con_banco, filtro_sql);
     if negociacoes = nil then
       Exclamar('Nenhum dado encontrado!')
     else begin
@@ -106,18 +108,7 @@ begin
       total_negociacoes := 0;
       for i := Low(negociacoes) to High(negociacoes) do begin
         sgResultado.Cells[cNegociacao, linha] := FormatoMilharStr(negociacoes[i].negociacao_id, 0);
-
-        if negociacoes[i].status = 'PEN' then
-          sgResultado.Cells[cStatus, linha] := 'Pendente'
-        else if negociacoes[i].status = 'APR' then
-          sgResultado.Cells[cStatus, linha] := 'Aprovada'
-        else if negociacoes[i].status = 'CON' then
-          sgResultado.Cells[cStatus, linha] := 'Concluída'
-        else if negociacoes[i].status = 'CAN' then
-          sgResultado.Cells[cStatus, linha] := 'Cancelada'
-        else
-          sgResultado.Cells[cStatus, linha] := '-';
-
+        sgResultado.Cells[cStatus, linha] := negociacoes[i].status_analitico;
         sgResultado.Cells[cProdutor, linha] := negociacoes[i].nome_produtor;
         sgResultado.Cells[cDistribuidor, linha] := negociacoes[i].nome_distribuidor;
         sgResultado.Cells[cTotal_Negociacao, linha] := FormatoMilharStr(negociacoes[i].total);
@@ -146,14 +137,19 @@ begin
       Inc(linha);
 
       sgResultado.Cells[cTipo_Linha, linha] := 'T';
-      sgResultado.Cells[cProdutor, linha] := 'Total geral';
-      sgResultado.Cells[cTipo_Linha, linha] := FormatoMilharStr(total_negociacoes);
+      sgResultado.Cells[cProdutor, linha] := 'Total negociações';
+      sgResultado.Cells[cTotal_Negociacao, linha] := FormatoMilharStr(total_negociacoes);
+
+      Inc(linha);
+
+      if linha > sgResultado.RowCount then
+        sgResultado.RowCount := linha;
 
       pcRelacaoNegociacao.ActivePage := tsResultado;
       sgResultado.SetFocus;
     end;
   finally
-    form_msg.Free;
+    FreeAndNil(form_msg);
   end;
 end;
 
@@ -161,6 +157,7 @@ procedure TFormRelacaoNegociacoes.FormCreate(Sender: TObject);
 begin
   inherited;
   pcRelacaoNegociacao.ActivePage := tsFiltros;
+  filtro_sql := '';
 
   IniciarGrid(
     sgResultado,
@@ -198,41 +195,79 @@ begin
   );
 end;
 
-procedure TFormRelacaoNegociacoes.sbImprimirClick(Sender: TObject);
-var
-  i: Integer;
+procedure TFormRelacaoNegociacoes.frDistribuidorsgConsultaKeyDown(Sender: TObject; var Key: Word; Shift: TShiftState);
 begin
   inherited;
-  query.FieldDefs.Clear;
-  query
+  if Key = VK_DELETE then
+    frDistribuidor.Clear;
+end;
 
-  for i := sgResultado.FixedRows to sgResultado.RowCount - 1 do begin
-    query.FieldDefs.Add('NEGOCIACAO_ID', ftString, 12, False);
-    query.FieldDefs.Add('STATUS', ftString, 3, False);
-    query.FieldDefs.Add('TOTAL', ftString, 12, False);
-    query.FieldDefs.Add('DATA_CADASTRO', ftString, 10, False);
-    query.FieldDefs.Add('DATA_APROVACAO', ftString, 10, False);
-    query.FieldDefs.Add('DATA_CONCLUSAO', ftString, 10, False);
-    query.FieldDefs.Add('DATA_CANCELAMENTO', ftString, 10, False);
-    query.FieldDefs.Add('NOME_PRODUTOR', ftString, 150, False);
-    query.FieldDefs.Add('NOME_DISTRIBUIDOR', ftString, 150, False);
+procedure TFormRelacaoNegociacoes.frProdutorsgConsultaKeyDown(Sender: TObject; var Key: Word; Shift: TShiftState);
+begin
+  inherited;
+  if Key = VK_DELETE then
+    frProdutor.Clear;
+end;
 
-    query.FieldByName('NEGOCIACAO_ID').AsString := sgResultado.Cells[cNegociacao, i];
-    query.FieldByName('STATUS').AsString := sgResultado.Cells[cStatus, i];
-    query.FieldByName('TOTAL').AsString := sgResultado.Cells[cTotal_Negociacao, i];
-    query.FieldByName('DATA_CADASTRO').AsString := sgResultado.Cells[cData_Cadastro, i];
-    query.FieldByName('DATA_APROVACAO').AsString := sgResultado.Cells[cData_Aprovacao, i];
-    query.FieldByName('DATA_CONCLUSAO').AsString := sgResultado.Cells[cData_Conclusao, i];
-    query.FieldByName('DATA_CANCELAMENTO').AsString := sgResultado.Cells[cData_Cancelamento, i];
-    query.FieldByName('NOME_PRODUTOR').AsString := sgResultado.Cells[cProdutor, i];
-    query.FieldByName('NOME_DISTRIBUIDOR').AsString := sgResultado.Cells[cDistribuidor, i];
+procedure TFormRelacaoNegociacoes.sbImprimirClick(Sender: TObject);
+begin
+  inherited;
+  if sgResultado.Cells[cNegociacao, sgResultado.FixedRows] = '' then begin
+    Exclamar('Não há dados para impressão!');
+    Abort;
   end;
 
+  if not FileExists(ExtractFilePath(Application.ExeName) + 'RelatorioNegociacoes.fr3') then begin
+    Exclamar(
+      'Não foi possível encontrar o arquivo de configuração do relatório!' + #13 +
+      'Arquivo: ' + ExtractFilePath(Application.ExeName) + 'RelatorioNegociacoes.fr3'
+    );
+    Abort;
+  end;
+
+  query.Active := False;
+  query.Close;
+  query.SQLConnection := Ambiente.con_banco.GetConexao;
+  query.CommandText :=
+    'select ' +
+    '  NEG.NEGOCIACAO_ID, ' +
+    '  case ' +
+    '    NEG.STATUS ' +
+    '    when ''PEN'' then ''Pendente'' ' +
+    '    when ''APR'' then ''Aprovada'' ' +
+    '    when ''CON'' then ''Concluída'' ' +
+    '    when ''CAN'' then ''Cancelada'' ' +
+    '    else ''-'' ' +
+    '  end as STATUS_ANALITICO, ' +
+    '  PRO.RAZAO_SOCIAL as NOME_PRODUTOR, ' +
+    '  DIS.RAZAO_SOCIAL as NOME_DISTRIBUIDOR, ' +
+    '  NEG.TOTAL, ' +
+    '  NEG.DATA_CADASTRO, ' +
+    '  NEG.DATA_APROVACAO, ' +
+    '  NEG.DATA_CONCLUSAO, ' +
+    '  NEG.DATA_CANCELAMENTO ' +
+    'from ' +
+    '  NEGOCIACOES NEG ' +
+
+    'inner join PESSOAS PRO ' +
+    'on NEG.PRODUTOR_ID = PRO.PESSOA_ID ' +
+
+    'inner join PESSOAS DIS ' +
+    'on NEG.DISTRIBUIDOR_ID = DIS.PESSOA_ID ' +
+
+    'where 1=1 ' +
+    filtro_sql;
+
+  query.Open;
+
+  frxDataSetRelatorio.DataSet := nil;
 
   frxDataSetRelatorio.DataSet := query;
   frxRelatorio.LoadFromFile(ExtractFilePath(Application.ExeName) + 'RelatorioNegociacoes.fr3');
   frxRelatorio.PrepareReport(True);
   frxRelatorio.ShowReport;
+
+  query.Active := False;
 end;
 
 end.

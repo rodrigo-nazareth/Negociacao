@@ -61,12 +61,7 @@ var
   i: Integer;
 begin
   for i := 0 to Screen.FormCount - 1 do begin
-    if Screen.Forms[i].Name <> Self.Name then begin
-      if Screen.Forms[i].Name = '' then begin
-        Screen.Forms[i].Free;
-        Continue;
-      end;
-
+    if (Screen.Forms[i].Name <> Self.Name) and (Screen.Forms[i].Name <> '') then begin
       MessageDlg('Ainda existem telas abertas na aplicação!', mtWarning, [mbOK], 0);
       Screen.Forms[i].WindowState := wsNormal;
       Screen.Forms[i].BringToFront;
