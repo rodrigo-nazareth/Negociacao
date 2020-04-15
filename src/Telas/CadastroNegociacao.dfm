@@ -17,7 +17,7 @@ inherited FormCadastroNegociacao: TFormCadastroNegociacao
     Left = 392
     Top = 175
     Width = 56
-    Height = 13
+    Height = 16
     Caption = 'Quantidade'
   end
   object Label3: TLabel [2]
@@ -388,9 +388,9 @@ inherited FormCadastroNegociacao: TFormCadastroNegociacao
   end
   object sgItens: TStringGrid
     Left = 4
-    Top = 240
+    Top = 244
     Width = 578
-    Height = 147
+    Height = 142
     DefaultRowHeight = 19
     DrawingStyle = gdsClassic
     Enabled = False
@@ -498,7 +498,7 @@ inherited FormCadastroNegociacao: TFormCadastroNegociacao
   object StaticText5: TStaticText
     AlignWithMargins = True
     Left = 4
-    Top = 213
+    Top = 215
     Width = 578
     Height = 26
     Alignment = taCenter

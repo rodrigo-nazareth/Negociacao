@@ -4,7 +4,7 @@ object FormPrincipal: TFormPrincipal
   Caption = 'Principal'
   ClientHeight = 419
   ClientWidth = 662
-  Color = clAppWorkSpace
+  Color = clGradientInactiveCaption
   Font.Charset = DEFAULT_CHARSET
   Font.Color = clBlack
   Font.Height = -11

@@ -43,7 +43,6 @@ inherited FormCadastroBase: TFormCadastroBase
       Width = 75
       Height = 25
       Caption = '&Gravar'
-      Enabled = False
       Glyph.Data = {
         DE010000424DDE01000000000000760000002800000024000000120000000100
         0400000000006801000000000000000000001000000000000000000000000000

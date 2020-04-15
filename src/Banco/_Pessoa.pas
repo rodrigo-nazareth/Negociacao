@@ -130,6 +130,7 @@ var
   pessoa: TPessoa;
   lim: TLimiteCreditoProdutor;
   novo_registro: Boolean;
+  novo_registro_lim: Boolean;
   pesq: TPesquisa;
 begin
   Result.teve_erro := False;
@@ -167,9 +168,9 @@ begin
       pesq.SQL.Clear;
       pesq.SQL.Add('select count(*) as QTDE from LIMITES_CREDITO_PRODUTOR where PRODUTOR_ID = :P1 and DISTRIBUIDOR_ID = :P2');
       pesq.Pesquisar([pessoa_id, limites[i].distribuidor_id]);
-      novo_registro := pesq.AsColunaInt('QTDE') = 0;
+      novo_registro_lim := pesq.AsColunaInt('QTDE') = 0;
 
-      if novo_registro then
+      if novo_registro_lim then
         lim.Inserir
       else
         lim.Alterar;

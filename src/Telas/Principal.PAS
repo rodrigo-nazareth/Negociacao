@@ -35,10 +35,6 @@ type
     procedure miTestarConexaoClick(Sender: TObject);
     procedure miCadastroNegociacaoClick(Sender: TObject);
     procedure miManutencaoNegociacaoClick(Sender: TObject);
-  private
-    { Private declarations }
-  public
-    { Public declarations }
   end;
 
 var

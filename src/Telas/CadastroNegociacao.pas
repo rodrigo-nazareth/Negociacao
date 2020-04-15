@@ -100,6 +100,14 @@ var
   limites: WebLimiteCreditoProdutor;
 begin
   limites := _LimiteCreditoProdutor.BuscarLimiteCreditoTelaNegociacao(Ambiente.con_banco, frProdutor.GetCodigo, frDistribuidor.GetCodigo);
+
+  if limites.limite_credito = 0 then begin
+    frDistribuidor.Clear;
+    frDistribuidor.sgConsulta.SetFocus;
+    Exclamar('Produtor não possui crédito com este distribuidor!');
+    Abort;
+  end;
+
   stLimite.Caption := FormatoMilharStr(limites.limite_credito);
   stLimiteUtilizado.Caption := FormatoMilharStr(limites.limite_credito_utilizado);
   stLimiteDisponivel.Caption := FormatoMilharStr(limites.limite_credito_disponivel);
@@ -497,6 +505,8 @@ begin
       btnExcluir.Enabled := False;
       btnGravar.Enabled := False;
     end;
+
+    frProdutor.btnPesquisar.SetFocus;
   end
   else begin
     eCodigo.Clear;
